@@ -6,6 +6,7 @@
       "label": "Canmore townsite — verification point only, not a trail",
       "lat": 51.0886,
       "lon": -115.3489,
+      "elevation_m": 1309,
       "active": true
     },
     {
@@ -14,6 +15,7 @@
       "label": "PLACEHOLDER — exposed ridge section, not trailhead. Needs real coordinates.",
       "lat": null,
       "lon": null,
+      "elevation_m": null,
       "active": false
     },
     {
@@ -22,6 +24,7 @@
       "label": "PLACEHOLDER — North Buller pass. Needs real coordinates.",
       "lat": null,
       "lon": null,
+      "elevation_m": null,
       "active": false
     },
     {
@@ -30,6 +33,7 @@
       "label": "PLACEHOLDER — Floe Lake side, high point. Needs real coordinates.",
       "lat": null,
       "lon": null,
+      "elevation_m": null,
       "active": false
     },
     {
@@ -38,6 +42,7 @@
       "label": "PLACEHOLDER — Numa/Tumbling pass area. Needs real coordinates.",
       "lat": null,
       "lon": null,
+      "elevation_m": null,
       "active": false
     }
   ]

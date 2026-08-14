@@ -2,10 +2,13 @@ name: Fetch weather data
 
 on:
   schedule:
-    # Runs once daily at 12:00 UTC (~5am Mountain Standard Time / ~6am Mountain
-    # Daylight Time -- GitHub's cron doesn't know about daylight saving, so this
-    # drifts by an hour for part of the year).
-    - cron: "0 12 * * *"
+    # Runs hourly. Mountain weather changes fast, and GitHub Actions minutes
+    # are free/unlimited on public repos, so there's no cost to checking
+    # often. Each model in fetch_weather.py independently figures out its
+    # own freshest available run -- polling hourly just means we always
+    # grab the shortest (most accurate) lead time available at that moment,
+    # even for models that only update every 6-12 hours themselves.
+    - cron: "0 * * * *"
   workflow_dispatch: {}
 
 permissions:
@@ -25,6 +28,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run fetch_weather.py
+        timeout-minutes: 15
         run: python fetch_weather.py
 
       - name: Commit and push latest.json
