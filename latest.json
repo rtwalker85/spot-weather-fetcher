@@ -1,0 +1,21 @@
+{
+  "generated_at_utc": "2026-08-14T20:10:09Z",
+  "model": "hrdps",
+  "model_run_utc": "2026-08-14T12:00:00Z",
+  "forecast_valid_utc": "2026-08-14T18:00:00Z",
+  "note": "cloud_cover_pct is total cloud cover (%), not a ceiling height in feet -- HRDPS does not publish a direct cloud-ceiling variable, so total cloud cover is used as the closest available proxy. Any location with active=false in locations.json is a placeholder and is not included below.",
+  "locations": {
+    "test_canmore": {
+      "route": "Test Point",
+      "label": "Canmore townsite \u2014 verification point only, not a trail",
+      "lat": 51.0886,
+      "lon": -115.3489,
+      "temp_c": 9.6,
+      "cloud_cover_pct": 99.0,
+      "wind_speed_kmh": 2.1,
+      "wind_gust_kmh": 4.6,
+      "wind_dir_deg": 121.0,
+      "grid_distance_km": 1.49
+    }
+  }
+}

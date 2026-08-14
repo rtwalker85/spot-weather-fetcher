@@ -1,0 +1,6 @@
+herbie-data
+cfgrib
+xarray
+numpy
+pandas
+scikit-learn

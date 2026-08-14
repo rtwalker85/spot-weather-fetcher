@@ -1,0 +1,44 @@
+{
+  "points": [
+    {
+      "id": "test_canmore",
+      "route": "Test Point",
+      "label": "Canmore townsite — verification point only, not a trail",
+      "lat": 51.0886,
+      "lon": -115.3489,
+      "active": true
+    },
+    {
+      "id": "tent_ridge_crux",
+      "route": "Tent Ridge",
+      "label": "PLACEHOLDER — exposed ridge section, not trailhead. Needs real coordinates.",
+      "lat": null,
+      "lon": null,
+      "active": false
+    },
+    {
+      "id": "buller_pass",
+      "route": "Buller Loop",
+      "label": "PLACEHOLDER — North Buller pass. Needs real coordinates.",
+      "lat": null,
+      "lon": null,
+      "active": false
+    },
+    {
+      "id": "rockwall_south",
+      "route": "Rockwall",
+      "label": "PLACEHOLDER — Floe Lake side, high point. Needs real coordinates.",
+      "lat": null,
+      "lon": null,
+      "active": false
+    },
+    {
+      "id": "rockwall_north",
+      "route": "Rockwall",
+      "label": "PLACEHOLDER — Numa/Tumbling pass area. Needs real coordinates.",
+      "lat": null,
+      "lon": null,
+      "active": false
+    }
+  ]
+}
