@@ -1,21 +1,187 @@
 {
-  "generated_at_utc": "2026-08-14T20:16:11Z",
-  "model": "hrdps",
-  "model_run_utc": "2026-08-14T12:00:00Z",
-  "forecast_valid_utc": "2026-08-14T18:00:00Z",
-  "note": "cloud_cover_pct is total cloud cover (%), not a ceiling height in feet -- HRDPS does not publish a direct cloud-ceiling variable, so total cloud cover is used as the closest available proxy. Any location with active=false in locations.json is a placeholder and is not included below.",
+  "generated_at_utc": "2026-08-14T22:33:37Z",
+  "note": "Different models publish different variables -- a location's entry for a given model only includes what that model actually provides (e.g. only HRRR/RAP/NAM/GFS publish a direct cloud-ceiling height and freezing level; HRDPS/RDPS/GDPS do not). model_elevation_m is what that model's own terrain grid thinks the elevation is at the matched point -- compare against the location's real elevation_m in locations.json to gauge how much a coarse grid may be smoothing over sharp terrain. Precipitation TYPE is only included for the US bundled models (rain/snow/freezing_rain/ice_pellets flags are unambiguous); the Canadian per-file models' PTYPE-style numeric codes are deferred until verified. A null cloud_ceiling_m means the model found no defined cloud base (effectively clear / unlimited ceiling), not that the reading is missing. cape_jkg is null when the model reports a negative sentinel (no instability data) rather than a real value, since CAPE can't physically be negative. Any location with active=false in locations.json is a placeholder and is not included below.",
+  "models": {
+    "hrdps": {
+      "label": "HRDPS Continental (Canada, 2.5km)",
+      "status": "ok",
+      "run_utc": "2026-08-14T18:00:00Z",
+      "forecast_valid_utc": "2026-08-14T18:00:00Z"
+    },
+    "rdps": {
+      "label": "RDPS (Canada, 10km)",
+      "status": "ok",
+      "run_utc": "2026-08-14T18:00:00Z",
+      "forecast_valid_utc": "2026-08-14T18:00:00Z"
+    },
+    "gdps": {
+      "label": "GDPS (Canada global, 15km)",
+      "status": "ok",
+      "run_utc": "2026-08-14T12:00:00Z",
+      "forecast_valid_utc": "2026-08-14T18:00:00Z"
+    },
+    "raqdps": {
+      "label": "RAQDPS (Canada air quality / wildfire smoke, 10km)",
+      "status": "ok",
+      "run_utc": "2026-08-14T12:00:00Z",
+      "forecast_valid_utc": "2026-08-14T18:00:00Z"
+    },
+    "hrrr": {
+      "label": "HRRR (US, 3km)",
+      "status": "ok",
+      "run_utc": "2026-08-14T21:00:00Z",
+      "forecast_valid_utc": "2026-08-14T21:00:00Z"
+    },
+    "rap": {
+      "label": "RAP (US, 13km)",
+      "status": "ok",
+      "run_utc": "2026-08-14T21:00:00Z",
+      "forecast_valid_utc": "2026-08-14T21:00:00Z"
+    },
+    "nam": {
+      "label": "NAM CONUS Nest (US, 5km)",
+      "status": "ok",
+      "run_utc": "2026-08-14T18:00:00Z",
+      "forecast_valid_utc": "2026-08-14T18:00:00Z"
+    },
+    "gfs": {
+      "label": "GFS (US global, 0.25deg)",
+      "status": "ok",
+      "run_utc": "2026-08-14T18:00:00Z",
+      "forecast_valid_utc": "2026-08-14T18:00:00Z"
+    },
+    "ifs": {
+      "label": "ECMWF IFS (global, 0.25deg)",
+      "status": "ok",
+      "run_utc": "2026-08-14T12:00:00Z",
+      "forecast_valid_utc": "2026-08-14T18:00:00Z"
+    },
+    "aifs": {
+      "label": "ECMWF AIFS (AI model, global, 0.25deg)",
+      "status": "ok",
+      "run_utc": "2026-08-14T12:00:00Z",
+      "forecast_valid_utc": "2026-08-14T18:00:00Z"
+    }
+  },
   "locations": {
     "test_canmore": {
       "route": "Test Point",
       "label": "Canmore townsite \u2014 verification point only, not a trail",
       "lat": 51.0886,
       "lon": -115.3489,
-      "temp_c": 9.6,
-      "cloud_cover_pct": 99.0,
-      "wind_speed_kmh": 2.1,
-      "wind_gust_kmh": 4.6,
-      "wind_dir_deg": 121.0,
-      "grid_distance_km": 1.49
+      "elevation_m": 1309,
+      "by_model": {
+        "hrdps": {
+          "temp_c": 9.1,
+          "cloud_cover_pct": 0.0,
+          "wind_speed_kmh": 1.6,
+          "wind_gust_kmh": 3.9,
+          "wind_dir_deg": 121.0,
+          "cape_jkg": null,
+          "model_elevation_m": 1521.0,
+          "grid_distance_km": 1.49
+        },
+        "rdps": {
+          "temp_c": 7.3,
+          "cloud_cover_pct": 98.0,
+          "wind_speed_kmh": 2.4,
+          "wind_gust_kmh": 4.4,
+          "wind_dir_deg": 60.0,
+          "cape_jkg": 28.0,
+          "grid_distance_km": 2.53
+        },
+        "gdps": {
+          "temp_c": 7.8,
+          "cloud_cover_pct": 56.0,
+          "wind_speed_kmh": 2.5,
+          "wind_gust_kmh": 6.0,
+          "wind_dir_deg": 89.0,
+          "cape_jkg": 78.0,
+          "grid_distance_km": 6.83
+        },
+        "raqdps": {
+          "pm25_ugm3": 0.6,
+          "pm25_wildfire_smoke_ugm3": 0.0,
+          "grid_distance_km": 5.0
+        },
+        "hrrr": {
+          "temp_c": 14.2,
+          "cloud_cover_pct": 20.0,
+          "wind_gust_kmh": 6.9,
+          "visibility_km": 26.8,
+          "cape_jkg": 20.0,
+          "cloud_ceiling_m": null,
+          "freezing_level_m": 2978.0,
+          "model_elevation_m": 1338.0,
+          "smoke_ugm3": 0.4,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.3,
+          "wind_dir_deg": 160.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.0
+        },
+        "rap": {
+          "temp_c": 8.7,
+          "cloud_cover_pct": 61.0,
+          "wind_gust_kmh": 7.7,
+          "visibility_km": 9.25,
+          "cape_jkg": 80.0,
+          "cloud_ceiling_m": 2034.0,
+          "freezing_level_m": 3083.0,
+          "model_elevation_m": 1905.0,
+          "smoke_ugm3": 1.2,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.7,
+          "wind_dir_deg": 111.0,
+          "precip_type": "none",
+          "grid_distance_km": 5.71
+        },
+        "nam": {
+          "temp_c": 12.3,
+          "cloud_cover_pct": 79.0,
+          "wind_gust_kmh": 9.0,
+          "visibility_km": 24.1,
+          "cape_jkg": 106.0,
+          "cloud_ceiling_m": 2491.0,
+          "freezing_level_m": 3003.0,
+          "model_elevation_m": 1491.0,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 6.2,
+          "wind_dir_deg": 185.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.05
+        },
+        "gfs": {
+          "temp_c": 6.1,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 3.3,
+          "visibility_km": 24.13,
+          "cape_jkg": 12.0,
+          "cloud_ceiling_m": 2006.0,
+          "freezing_level_m": 2733.0,
+          "model_elevation_m": 1917.0,
+          "wind_speed_kmh": 3.7,
+          "wind_dir_deg": 73.0,
+          "precip_type": "rain",
+          "grid_distance_km": 12.04
+        },
+        "ifs": {
+          "temp_c": 8.2,
+          "cloud_cover_pct": 100.0,
+          "cape_jkg": 12.0,
+          "precip_type_code": 1.0,
+          "wind_speed_kmh": 4.8,
+          "wind_dir_deg": 65.0,
+          "grid_distance_km": 12.04
+        },
+        "aifs": {
+          "temp_c": 7.3,
+          "cloud_cover_pct": 98.0,
+          "wind_speed_kmh": 4.7,
+          "wind_dir_deg": 91.0,
+          "grid_distance_km": 12.04
+        }
+      }
     }
   }
 }
