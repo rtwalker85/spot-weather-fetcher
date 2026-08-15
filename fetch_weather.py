@@ -32,6 +32,7 @@ directly answers whether the crux itself is in cloud.
 
 import json
 import sys
+import time
 from datetime import datetime, timezone
 from math import asin, cos, radians, sin, sqrt
 from pathlib import Path
@@ -136,7 +137,10 @@ NOTE = (
     "freezing_level_m are GFS-family only. Air-quality fields (pm2_5, "
     "pm10, us_aqi, aerosol_optical_depth) come from a separate global "
     "forecast (CAMS) and are therefore listed ONCE per location under "
-    "air_quality, not repeated per weather model.\n\n"
+    "air_quality, not repeated per weather model. Check the top-level "
+    "air_quality_status field: if it is not \"ok\", that upstream "
+    "service failed this run and the air_quality blocks are absent -- "
+    "that is a temporary fetch failure, NOT a reading of clean air.\n\n"
     "forecast_elevation_m and grid_distance_km sit at the LOCATION level "
     "(not per model) because every model for a location is resolved to the "
     "same downscaled grid point: forecast_elevation_m is the elevation the "
@@ -220,10 +224,23 @@ def interp_cloud_at_elevation(levels, elevation_m):
     return None
 
 
-def fetch_json(url, params):
-    resp = requests.get(url, params=params, timeout=REQUEST_TIMEOUT)
-    resp.raise_for_status()
-    return resp.json()
+def fetch_json(url, params, attempts=3):
+    """Transient timeouts from the API do happen (observed on GitHub's
+    runners). Retry with backoff rather than losing a whole category of
+    data for the hour because one request was slow."""
+    last = None
+    for attempt in range(attempts):
+        try:
+            resp = requests.get(url, params=params, timeout=REQUEST_TIMEOUT)
+            resp.raise_for_status()
+            return resp.json()
+        except Exception as e:
+            last = e
+            if attempt < attempts - 1:
+                wait = 2 * (attempt + 1)
+                print(f"      attempt {attempt + 1} failed ({e}); retrying in {wait}s")
+                time.sleep(wait)
+    raise last
 
 
 # ---------------------------------------------------------------------------
@@ -265,9 +282,11 @@ def main():
             **common,
             "hourly": ",".join(AIR_QUALITY_FIELDS),
         }))
+        air_status = "ok"
     except Exception as e:
-        print(f"      air quality unavailable: {e}")
+        print(f"      air quality unavailable after retries: {e}")
         air = [None] * len(points)
+        air_status = f"unavailable: {e.__class__.__name__}"
 
     locations_out = {}
     model_coverage = {key: [] for key in MODELS}
@@ -395,6 +414,7 @@ def main():
         "generated_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "source": "Open-Meteo (per-model point forecasts; CAMS for air quality)",
         "note": NOTE,
+        "air_quality_status": air_status,
         "models": models_out,
         "locations": locations_out,
     }
