@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-14T23:26:09Z",
+  "generated_at_utc": "2026-08-15T00:25:03Z",
   "note": "Different models publish different variables -- a location's entry for a given model only includes what that model actually provides (e.g. only HRRR/RAP/NAM/GFS publish a direct cloud-ceiling height and freezing level; HRDPS/RDPS/GDPS do not). model_elevation_m is what that model's own terrain grid thinks the elevation is at the matched point -- compare against the location's real elevation_m in locations.json to gauge how much a coarse grid may be smoothing over sharp terrain. Precipitation TYPE is only included for the US bundled models (rain/snow/freezing_rain/ice_pellets flags are unambiguous); the Canadian per-file models' PTYPE-style numeric codes are deferred until verified. A null cloud_ceiling_m means the model found no defined cloud base (effectively clear / unlimited ceiling), not that the reading is missing. cape_jkg is null when the model reports a negative sentinel (no instability data) rather than a real value, since CAPE can't physically be negative. Any location with active=false in locations.json is a placeholder and is not included below.",
   "models": {
     "hrdps": {
@@ -29,14 +29,14 @@
     "hrrr": {
       "label": "HRRR (US, 3km)",
       "status": "ok",
-      "run_utc": "2026-08-14T22:00:00Z",
-      "forecast_valid_utc": "2026-08-14T22:00:00Z"
+      "run_utc": "2026-08-14T23:00:00Z",
+      "forecast_valid_utc": "2026-08-14T23:00:00Z"
     },
     "rap": {
       "label": "RAP (US, 13km)",
       "status": "ok",
-      "run_utc": "2026-08-14T22:00:00Z",
-      "forecast_valid_utc": "2026-08-14T22:00:00Z"
+      "run_utc": "2026-08-14T23:00:00Z",
+      "forecast_valid_utc": "2026-08-14T23:00:00Z"
     },
     "nam": {
       "label": "NAM CONUS Nest (US, 5km)",
@@ -106,33 +106,33 @@
         },
         "hrrr": {
           "temp_c": 13.6,
-          "cloud_cover_pct": 41.0,
-          "wind_gust_kmh": 11.9,
-          "visibility_km": 21.1,
-          "cape_jkg": 50.0,
+          "cloud_cover_pct": 27.0,
+          "wind_gust_kmh": 16.3,
+          "visibility_km": 21.8,
+          "cape_jkg": 20.0,
           "cloud_ceiling_m": null,
-          "freezing_level_m": 3041.0,
+          "freezing_level_m": 3146.0,
           "model_elevation_m": 1338.0,
-          "smoke_ugm3": 0.6,
+          "smoke_ugm3": 0.5,
           "precip_1h_mm": 0.0,
-          "wind_speed_kmh": 10.3,
-          "wind_dir_deg": 160.0,
+          "wind_speed_kmh": 13.3,
+          "wind_dir_deg": 165.0,
           "precip_type": "none",
           "grid_distance_km": 1.0
         },
         "rap": {
-          "temp_c": 9.1,
-          "cloud_cover_pct": 87.0,
-          "wind_gust_kmh": 8.9,
-          "visibility_km": 16.17,
-          "cape_jkg": 70.0,
-          "cloud_ceiling_m": 2267.0,
-          "freezing_level_m": 3161.0,
+          "temp_c": 8.8,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 10.5,
+          "visibility_km": 9.21,
+          "cape_jkg": 100.0,
+          "cloud_ceiling_m": 2074.0,
+          "freezing_level_m": 3127.0,
           "model_elevation_m": 1905.0,
-          "smoke_ugm3": 1.2,
+          "smoke_ugm3": 1.3,
           "precip_1h_mm": 0.0,
-          "wind_speed_kmh": 6.2,
-          "wind_dir_deg": 132.0,
+          "wind_speed_kmh": 8.1,
+          "wind_dir_deg": 121.0,
           "precip_type": "none",
           "grid_distance_km": 5.71
         },
@@ -180,6 +180,1196 @@
           "wind_speed_kmh": 5.3,
           "wind_dir_deg": 81.0,
           "grid_distance_km": 12.04
+        }
+      }
+    },
+    "northover_ridge_high_point": {
+      "route": "Northover Ridge",
+      "label": "ridge crest high point, from GPX track",
+      "lat": 50.59782,
+      "lon": -115.26796,
+      "elevation_m": 2788,
+      "by_model": {
+        "hrdps": {
+          "temp_c": 4.4,
+          "cloud_cover_pct": 0.0,
+          "wind_speed_kmh": 0.5,
+          "wind_gust_kmh": 0.5,
+          "wind_dir_deg": 40.0,
+          "cape_jkg": null,
+          "model_elevation_m": 2342.0,
+          "grid_distance_km": 1.6
+        },
+        "rdps": {
+          "temp_c": 5.8,
+          "cloud_cover_pct": 78.0,
+          "wind_speed_kmh": 0.5,
+          "wind_gust_kmh": 5.3,
+          "wind_dir_deg": 97.0,
+          "cape_jkg": 40.0,
+          "grid_distance_km": 3.51
+        },
+        "gdps": {
+          "temp_c": 6.0,
+          "cloud_cover_pct": 92.0,
+          "wind_speed_kmh": 1.1,
+          "wind_gust_kmh": 5.3,
+          "wind_dir_deg": 109.0,
+          "cape_jkg": 29.0,
+          "grid_distance_km": 7.16
+        },
+        "raqdps": {
+          "pm25_ugm3": 0.3,
+          "pm25_wildfire_smoke_ugm3": 0.0,
+          "grid_distance_km": 2.41
+        },
+        "hrrr": {
+          "temp_c": 4.6,
+          "cloud_cover_pct": 89.0,
+          "wind_gust_kmh": 10.2,
+          "visibility_km": 13.2,
+          "cape_jkg": 30.0,
+          "cloud_ceiling_m": 2963.0,
+          "freezing_level_m": 3082.0,
+          "model_elevation_m": 2549.0,
+          "smoke_ugm3": 2.2,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 4.8,
+          "wind_dir_deg": 232.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.25
+        },
+        "rap": {
+          "temp_c": 6.7,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 8.5,
+          "visibility_km": 11.31,
+          "cape_jkg": 20.0,
+          "cloud_ceiling_m": 2336.0,
+          "freezing_level_m": 3127.0,
+          "model_elevation_m": 2148.0,
+          "smoke_ugm3": 4.5,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.2,
+          "wind_dir_deg": 136.0,
+          "precip_type": "none",
+          "grid_distance_km": 4.54
+        },
+        "nam": {
+          "temp_c": 5.6,
+          "cloud_cover_pct": 84.0,
+          "wind_gust_kmh": 11.2,
+          "visibility_km": 24.1,
+          "cape_jkg": 122.0,
+          "cloud_ceiling_m": 2725.0,
+          "freezing_level_m": 3145.0,
+          "model_elevation_m": 2449.0,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 8.5,
+          "wind_dir_deg": 106.0,
+          "precip_type": "rain",
+          "grid_distance_km": 1.21
+        },
+        "gfs": {
+          "temp_c": 6.2,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 5.1,
+          "visibility_km": 23.35,
+          "cape_jkg": 10.0,
+          "cloud_ceiling_m": 2333.0,
+          "freezing_level_m": 2880.0,
+          "model_elevation_m": 2111.0,
+          "wind_speed_kmh": 4.3,
+          "wind_dir_deg": 99.0,
+          "precip_type": "rain",
+          "grid_distance_km": 10.95
+        },
+        "ifs": {
+          "temp_c": 7.1,
+          "cloud_cover_pct": 100.0,
+          "cape_jkg": 12.0,
+          "precip_type_code": 1.0,
+          "wind_speed_kmh": 5.4,
+          "wind_dir_deg": 107.0,
+          "grid_distance_km": 10.95
+        },
+        "aifs": {
+          "temp_c": 8.8,
+          "cloud_cover_pct": 100.0,
+          "wind_speed_kmh": 5.3,
+          "wind_dir_deg": 107.0,
+          "grid_distance_km": 10.95
+        }
+      }
+    },
+    "ribbon_galatea_col": {
+      "route": "Ribbon to Galatea",
+      "label": "high col between Ribbon and Galatea valleys, from GPX track",
+      "lat": 50.87635,
+      "lon": -115.25188,
+      "elevation_m": 2438,
+      "by_model": {
+        "hrdps": {
+          "temp_c": 3.0,
+          "cloud_cover_pct": 0.0,
+          "wind_speed_kmh": 2.0,
+          "wind_gust_kmh": 2.0,
+          "wind_dir_deg": 74.0,
+          "cape_jkg": null,
+          "model_elevation_m": 2378.0,
+          "grid_distance_km": 0.24
+        },
+        "rdps": {
+          "temp_c": 5.9,
+          "cloud_cover_pct": 97.0,
+          "wind_speed_kmh": 1.6,
+          "wind_gust_kmh": 4.1,
+          "wind_dir_deg": 37.0,
+          "cape_jkg": 48.0,
+          "grid_distance_km": 2.9
+        },
+        "gdps": {
+          "temp_c": 5.8,
+          "cloud_cover_pct": 92.0,
+          "wind_speed_kmh": 1.6,
+          "wind_gust_kmh": 4.6,
+          "wind_dir_deg": 72.0,
+          "cape_jkg": 37.0,
+          "grid_distance_km": 4.67
+        },
+        "raqdps": {
+          "pm25_ugm3": 0.3,
+          "pm25_wildfire_smoke_ugm3": 0.0,
+          "grid_distance_km": 1.68
+        },
+        "hrrr": {
+          "temp_c": 4.8,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 7.3,
+          "visibility_km": 12.2,
+          "cape_jkg": 20.0,
+          "cloud_ceiling_m": 2564.0,
+          "freezing_level_m": 3089.0,
+          "model_elevation_m": 2404.0,
+          "smoke_ugm3": 1.1,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.0,
+          "wind_dir_deg": 129.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.29
+        },
+        "rap": {
+          "temp_c": 7.5,
+          "cloud_cover_pct": 96.0,
+          "wind_gust_kmh": 7.6,
+          "visibility_km": 14.31,
+          "cape_jkg": 40.0,
+          "cloud_ceiling_m": 2263.0,
+          "freezing_level_m": 3107.0,
+          "model_elevation_m": 2054.0,
+          "smoke_ugm3": 2.6,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.2,
+          "wind_dir_deg": 165.0,
+          "precip_type": "none",
+          "grid_distance_km": 4.18
+        },
+        "nam": {
+          "temp_c": 4.4,
+          "cloud_cover_pct": 66.0,
+          "wind_gust_kmh": 4.7,
+          "visibility_km": 0.1,
+          "cape_jkg": 36.0,
+          "cloud_ceiling_m": 2405.0,
+          "freezing_level_m": 3048.0,
+          "model_elevation_m": 2390.0,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 7.3,
+          "wind_dir_deg": 78.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.3
+        },
+        "gfs": {
+          "temp_c": 6.1,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 3.3,
+          "visibility_km": 24.13,
+          "cape_jkg": 12.0,
+          "cloud_ceiling_m": 2006.0,
+          "freezing_level_m": 2733.0,
+          "model_elevation_m": 1917.0,
+          "wind_speed_kmh": 3.7,
+          "wind_dir_deg": 73.0,
+          "precip_type": "rain",
+          "grid_distance_km": 13.75
+        },
+        "ifs": {
+          "temp_c": 8.2,
+          "cloud_cover_pct": 100.0,
+          "cape_jkg": 12.0,
+          "precip_type_code": 1.0,
+          "wind_speed_kmh": 4.8,
+          "wind_dir_deg": 65.0,
+          "grid_distance_km": 13.75
+        },
+        "aifs": {
+          "temp_c": 7.8,
+          "cloud_cover_pct": 100.0,
+          "wind_speed_kmh": 5.3,
+          "wind_dir_deg": 81.0,
+          "grid_distance_km": 13.75
+        }
+      }
+    },
+    "tent_ridge_crux": {
+      "route": "Tent Ridge",
+      "label": "exposed ridge section (not trailhead), from GPX track",
+      "lat": 50.82022,
+      "lon": -115.37353,
+      "elevation_m": 2513,
+      "by_model": {
+        "hrdps": {
+          "temp_c": 6.1,
+          "cloud_cover_pct": 0.0,
+          "wind_speed_kmh": 1.8,
+          "wind_gust_kmh": 4.3,
+          "wind_dir_deg": 62.0,
+          "cape_jkg": null,
+          "model_elevation_m": 2104.0,
+          "grid_distance_km": 1.5
+        },
+        "rdps": {
+          "temp_c": 5.4,
+          "cloud_cover_pct": 95.0,
+          "wind_speed_kmh": 0.6,
+          "wind_gust_kmh": 4.1,
+          "wind_dir_deg": 35.0,
+          "cape_jkg": 39.0,
+          "grid_distance_km": 5.47
+        },
+        "gdps": {
+          "temp_c": 5.7,
+          "cloud_cover_pct": 92.0,
+          "wind_speed_kmh": 1.4,
+          "wind_gust_kmh": 5.1,
+          "wind_dir_deg": 92.0,
+          "cape_jkg": 29.0,
+          "grid_distance_km": 3.7
+        },
+        "raqdps": {
+          "pm25_ugm3": 0.2,
+          "pm25_wildfire_smoke_ugm3": 0.0,
+          "grid_distance_km": 2.08
+        },
+        "hrrr": {
+          "temp_c": 7.2,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 6.6,
+          "visibility_km": 14.7,
+          "cape_jkg": 70.0,
+          "cloud_ceiling_m": 2729.0,
+          "freezing_level_m": 3140.0,
+          "model_elevation_m": 2145.0,
+          "smoke_ugm3": 1.8,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 3.9,
+          "wind_dir_deg": 90.0,
+          "precip_type": "none",
+          "grid_distance_km": 0.62
+        },
+        "rap": {
+          "temp_c": 6.7,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 6.7,
+          "visibility_km": 14.91,
+          "cape_jkg": 40.0,
+          "cloud_ceiling_m": 2380.0,
+          "freezing_level_m": 3107.0,
+          "model_elevation_m": 2204.0,
+          "smoke_ugm3": 3.6,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.5,
+          "wind_dir_deg": 183.0,
+          "precip_type": "none",
+          "grid_distance_km": 4.99
+        },
+        "nam": {
+          "temp_c": 9.6,
+          "cloud_cover_pct": 62.0,
+          "wind_gust_kmh": 10.4,
+          "visibility_km": 24.1,
+          "cape_jkg": 94.0,
+          "cloud_ceiling_m": 20000.0,
+          "freezing_level_m": 3080.0,
+          "model_elevation_m": 2119.0,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 2.4,
+          "wind_dir_deg": 103.0,
+          "precip_type": "none",
+          "grid_distance_km": 0.57
+        },
+        "gfs": {
+          "temp_c": 5.6,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 5.1,
+          "visibility_km": 24.13,
+          "cape_jkg": 8.0,
+          "cloud_ceiling_m": 2488.0,
+          "freezing_level_m": 2750.0,
+          "model_elevation_m": 2183.0,
+          "wind_speed_kmh": 3.4,
+          "wind_dir_deg": 78.0,
+          "precip_type": "none",
+          "grid_distance_km": 11.68
+        },
+        "ifs": {
+          "temp_c": 6.3,
+          "cloud_cover_pct": 100.0,
+          "cape_jkg": 10.0,
+          "precip_type_code": 1.0,
+          "wind_speed_kmh": 5.7,
+          "wind_dir_deg": 113.0,
+          "grid_distance_km": 11.68
+        },
+        "aifs": {
+          "temp_c": 6.8,
+          "cloud_cover_pct": 100.0,
+          "wind_speed_kmh": 5.1,
+          "wind_dir_deg": 97.0,
+          "grid_distance_km": 11.68
+        }
+      }
+    },
+    "buller_pass_north": {
+      "route": "Buller Pass Loop",
+      "label": "North Buller Pass, from GPX track",
+      "lat": 50.89304,
+      "lon": -115.27701,
+      "elevation_m": 2496,
+      "by_model": {
+        "hrdps": {
+          "temp_c": 4.2,
+          "cloud_cover_pct": 0.0,
+          "wind_speed_kmh": 2.1,
+          "wind_gust_kmh": 2.9,
+          "wind_dir_deg": 66.0,
+          "cape_jkg": null,
+          "model_elevation_m": 2319.0,
+          "grid_distance_km": 1.22
+        },
+        "rdps": {
+          "temp_c": 5.9,
+          "cloud_cover_pct": 97.0,
+          "wind_speed_kmh": 1.6,
+          "wind_gust_kmh": 4.1,
+          "wind_dir_deg": 37.0,
+          "cape_jkg": 48.0,
+          "grid_distance_km": 3.17
+        },
+        "gdps": {
+          "temp_c": 5.7,
+          "cloud_cover_pct": 92.0,
+          "wind_speed_kmh": 1.4,
+          "wind_gust_kmh": 5.1,
+          "wind_dir_deg": 92.0,
+          "cape_jkg": 29.0,
+          "grid_distance_km": 7.01
+        },
+        "raqdps": {
+          "pm25_ugm3": 0.3,
+          "pm25_wildfire_smoke_ugm3": 0.0,
+          "grid_distance_km": 3.55
+        },
+        "hrrr": {
+          "temp_c": 4.8,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 7.3,
+          "visibility_km": 12.2,
+          "cape_jkg": 20.0,
+          "cloud_ceiling_m": 2564.0,
+          "freezing_level_m": 3089.0,
+          "model_elevation_m": 2404.0,
+          "smoke_ugm3": 1.1,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.0,
+          "wind_dir_deg": 129.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.48
+        },
+        "rap": {
+          "temp_c": 7.5,
+          "cloud_cover_pct": 96.0,
+          "wind_gust_kmh": 7.6,
+          "visibility_km": 14.31,
+          "cape_jkg": 40.0,
+          "cloud_ceiling_m": 2263.0,
+          "freezing_level_m": 3107.0,
+          "model_elevation_m": 2054.0,
+          "smoke_ugm3": 2.6,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.2,
+          "wind_dir_deg": 165.0,
+          "precip_type": "none",
+          "grid_distance_km": 4.99
+        },
+        "nam": {
+          "temp_c": 4.4,
+          "cloud_cover_pct": 66.0,
+          "wind_gust_kmh": 4.7,
+          "visibility_km": 0.1,
+          "cape_jkg": 36.0,
+          "cloud_ceiling_m": 2405.0,
+          "freezing_level_m": 3048.0,
+          "model_elevation_m": 2390.0,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 7.3,
+          "wind_dir_deg": 78.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.44
+        },
+        "gfs": {
+          "temp_c": 6.1,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 3.3,
+          "visibility_km": 24.13,
+          "cape_jkg": 12.0,
+          "cloud_ceiling_m": 2006.0,
+          "freezing_level_m": 2733.0,
+          "model_elevation_m": 1917.0,
+          "wind_speed_kmh": 3.7,
+          "wind_dir_deg": 73.0,
+          "precip_type": "rain",
+          "grid_distance_km": 12.04
+        },
+        "ifs": {
+          "temp_c": 8.2,
+          "cloud_cover_pct": 100.0,
+          "cape_jkg": 12.0,
+          "precip_type_code": 1.0,
+          "wind_speed_kmh": 4.8,
+          "wind_dir_deg": 65.0,
+          "grid_distance_km": 12.04
+        },
+        "aifs": {
+          "temp_c": 7.8,
+          "cloud_cover_pct": 100.0,
+          "wind_speed_kmh": 5.3,
+          "wind_dir_deg": 81.0,
+          "grid_distance_km": 12.04
+        }
+      }
+    },
+    "buller_pass_south": {
+      "route": "Buller Pass Loop",
+      "label": "South Buller Pass (\"Buller Pass\"), from GPX track",
+      "lat": 50.8823,
+      "lon": -115.27344,
+      "elevation_m": 2501,
+      "by_model": {
+        "hrdps": {
+          "temp_c": 3.7,
+          "cloud_cover_pct": 0.0,
+          "wind_speed_kmh": 2.0,
+          "wind_gust_kmh": 2.5,
+          "wind_dir_deg": 72.0,
+          "cape_jkg": null,
+          "model_elevation_m": 2386.0,
+          "grid_distance_km": 1.3
+        },
+        "rdps": {
+          "temp_c": 5.9,
+          "cloud_cover_pct": 97.0,
+          "wind_speed_kmh": 1.6,
+          "wind_gust_kmh": 4.1,
+          "wind_dir_deg": 37.0,
+          "cape_jkg": 48.0,
+          "grid_distance_km": 3.42
+        },
+        "gdps": {
+          "temp_c": 5.8,
+          "cloud_cover_pct": 92.0,
+          "wind_speed_kmh": 1.6,
+          "wind_gust_kmh": 4.6,
+          "wind_dir_deg": 72.0,
+          "cape_jkg": 37.0,
+          "grid_distance_km": 6.28
+        },
+        "raqdps": {
+          "pm25_ugm3": 0.3,
+          "pm25_wildfire_smoke_ugm3": 0.0,
+          "grid_distance_km": 2.34
+        },
+        "hrrr": {
+          "temp_c": 4.8,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 7.3,
+          "visibility_km": 12.2,
+          "cape_jkg": 20.0,
+          "cloud_ceiling_m": 2564.0,
+          "freezing_level_m": 3089.0,
+          "model_elevation_m": 2404.0,
+          "smoke_ugm3": 1.1,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.0,
+          "wind_dir_deg": 129.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.22
+        },
+        "rap": {
+          "temp_c": 7.5,
+          "cloud_cover_pct": 96.0,
+          "wind_gust_kmh": 7.6,
+          "visibility_km": 14.31,
+          "cape_jkg": 40.0,
+          "cloud_ceiling_m": 2263.0,
+          "freezing_level_m": 3107.0,
+          "model_elevation_m": 2054.0,
+          "smoke_ugm3": 2.6,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.2,
+          "wind_dir_deg": 165.0,
+          "precip_type": "none",
+          "grid_distance_km": 5.11
+        },
+        "nam": {
+          "temp_c": 4.4,
+          "cloud_cover_pct": 66.0,
+          "wind_gust_kmh": 4.7,
+          "visibility_km": 0.1,
+          "cape_jkg": 36.0,
+          "cloud_ceiling_m": 2405.0,
+          "freezing_level_m": 3048.0,
+          "model_elevation_m": 2390.0,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 7.3,
+          "wind_dir_deg": 78.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.17
+        },
+        "gfs": {
+          "temp_c": 6.1,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 3.3,
+          "visibility_km": 24.13,
+          "cape_jkg": 12.0,
+          "cloud_ceiling_m": 2006.0,
+          "freezing_level_m": 2733.0,
+          "model_elevation_m": 1917.0,
+          "wind_speed_kmh": 3.7,
+          "wind_dir_deg": 73.0,
+          "precip_type": "rain",
+          "grid_distance_km": 13.19
+        },
+        "ifs": {
+          "temp_c": 8.2,
+          "cloud_cover_pct": 100.0,
+          "cape_jkg": 12.0,
+          "precip_type_code": 1.0,
+          "wind_speed_kmh": 4.8,
+          "wind_dir_deg": 65.0,
+          "grid_distance_km": 13.19
+        },
+        "aifs": {
+          "temp_c": 7.8,
+          "cloud_cover_pct": 100.0,
+          "wind_speed_kmh": 5.3,
+          "wind_dir_deg": 81.0,
+          "grid_distance_km": 13.19
+        }
+      }
+    },
+    "rockwall_numa_pass": {
+      "route": "Rockwall",
+      "label": "Numa Pass, near Floe Lake -- highest point on the trail, from GPX track",
+      "lat": 51.07319,
+      "lon": -116.14383,
+      "elevation_m": 2333,
+      "by_model": {
+        "hrdps": {
+          "temp_c": 5.1,
+          "cloud_cover_pct": 0.0,
+          "wind_speed_kmh": 3.3,
+          "wind_gust_kmh": 4.3,
+          "wind_dir_deg": 116.0,
+          "cape_jkg": null,
+          "model_elevation_m": 2300.0,
+          "grid_distance_km": 0.54
+        },
+        "rdps": {
+          "temp_c": 8.9,
+          "cloud_cover_pct": 75.0,
+          "wind_speed_kmh": 2.4,
+          "wind_gust_kmh": 3.3,
+          "wind_dir_deg": 111.0,
+          "cape_jkg": 6.0,
+          "grid_distance_km": 3.51
+        },
+        "gdps": {
+          "temp_c": 10.6,
+          "cloud_cover_pct": 80.0,
+          "wind_speed_kmh": 1.1,
+          "wind_gust_kmh": 5.7,
+          "wind_dir_deg": 179.0,
+          "cape_jkg": 30.0,
+          "grid_distance_km": 8.7
+        },
+        "raqdps": {
+          "pm25_ugm3": 0.2,
+          "pm25_wildfire_smoke_ugm3": 0.0,
+          "grid_distance_km": 2.89
+        },
+        "hrrr": {
+          "temp_c": 8.1,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 9.1,
+          "visibility_km": 16.1,
+          "cape_jkg": 90.0,
+          "cloud_ceiling_m": 2777.0,
+          "freezing_level_m": 3188.0,
+          "model_elevation_m": 2194.0,
+          "smoke_ugm3": 1.4,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 8.8,
+          "wind_dir_deg": 124.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.22
+        },
+        "rap": {
+          "temp_c": 11.9,
+          "cloud_cover_pct": 89.0,
+          "wind_gust_kmh": 12.3,
+          "visibility_km": 25.31,
+          "cape_jkg": 80.0,
+          "cloud_ceiling_m": null,
+          "freezing_level_m": 3257.0,
+          "model_elevation_m": 1905.0,
+          "smoke_ugm3": 2.4,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 9.5,
+          "wind_dir_deg": 191.0,
+          "precip_type": "none",
+          "grid_distance_km": 5.03
+        },
+        "nam": {
+          "temp_c": 6.1,
+          "cloud_cover_pct": 55.0,
+          "wind_gust_kmh": 1.1,
+          "visibility_km": 24.1,
+          "cape_jkg": 8.0,
+          "cloud_ceiling_m": 2628.0,
+          "freezing_level_m": 3118.0,
+          "model_elevation_m": 2267.0,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 1.4,
+          "wind_dir_deg": 31.0,
+          "precip_type": "rain",
+          "grid_distance_km": 1.17
+        },
+        "gfs": {
+          "temp_c": 14.6,
+          "cloud_cover_pct": 63.0,
+          "wind_gust_kmh": 4.4,
+          "visibility_km": 24.13,
+          "cape_jkg": 7.0,
+          "cloud_ceiling_m": 2856.0,
+          "freezing_level_m": 2870.0,
+          "model_elevation_m": 1669.0,
+          "wind_speed_kmh": 3.9,
+          "wind_dir_deg": 156.0,
+          "precip_type": "none",
+          "grid_distance_km": 11.02
+        },
+        "ifs": {
+          "temp_c": 12.7,
+          "cloud_cover_pct": 98.0,
+          "cape_jkg": 1.0,
+          "precip_type_code": 1.0,
+          "wind_speed_kmh": 4.0,
+          "wind_dir_deg": 146.0,
+          "grid_distance_km": 11.02
+        },
+        "aifs": {
+          "temp_c": 12.5,
+          "cloud_cover_pct": 99.0,
+          "wind_speed_kmh": 3.3,
+          "wind_dir_deg": 149.0,
+          "grid_distance_km": 11.02
+        }
+      }
+    },
+    "rockwall_tumbling_pass": {
+      "route": "Rockwall",
+      "label": "Tumbling Pass, from GPX track",
+      "lat": 51.12481,
+      "lon": -116.23018,
+      "elevation_m": 2227,
+      "by_model": {
+        "hrdps": {
+          "temp_c": 5.3,
+          "cloud_cover_pct": 0.0,
+          "wind_speed_kmh": 2.8,
+          "wind_gust_kmh": 3.8,
+          "wind_dir_deg": 120.0,
+          "cape_jkg": null,
+          "model_elevation_m": 2267.0,
+          "grid_distance_km": 1.05
+        },
+        "rdps": {
+          "temp_c": 10.2,
+          "cloud_cover_pct": 56.0,
+          "wind_speed_kmh": 2.6,
+          "wind_gust_kmh": 3.7,
+          "wind_dir_deg": 171.0,
+          "cape_jkg": 37.0,
+          "grid_distance_km": 4.18
+        },
+        "gdps": {
+          "temp_c": 10.0,
+          "cloud_cover_pct": 68.0,
+          "wind_speed_kmh": 2.3,
+          "wind_gust_kmh": 5.7,
+          "wind_dir_deg": 152.0,
+          "cape_jkg": 32.0,
+          "grid_distance_km": 3.12
+        },
+        "raqdps": {
+          "pm25_ugm3": 0.2,
+          "pm25_wildfire_smoke_ugm3": 0.0,
+          "grid_distance_km": 4.09
+        },
+        "hrrr": {
+          "temp_c": 10.3,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 6.2,
+          "visibility_km": 27.6,
+          "cape_jkg": 40.0,
+          "cloud_ceiling_m": 3094.0,
+          "freezing_level_m": 3209.0,
+          "model_elevation_m": 2117.0,
+          "smoke_ugm3": 2.4,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.4,
+          "wind_dir_deg": 224.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.28
+        },
+        "rap": {
+          "temp_c": 11.9,
+          "cloud_cover_pct": 51.0,
+          "wind_gust_kmh": 11.2,
+          "visibility_km": 33.01,
+          "cape_jkg": 40.0,
+          "cloud_ceiling_m": 3147.0,
+          "freezing_level_m": 3267.0,
+          "model_elevation_m": 2021.0,
+          "smoke_ugm3": 1.5,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 9.1,
+          "wind_dir_deg": 205.0,
+          "precip_type": "none",
+          "grid_distance_km": 5.4
+        },
+        "nam": {
+          "temp_c": 8.1,
+          "cloud_cover_pct": 50.0,
+          "wind_gust_kmh": 2.9,
+          "visibility_km": 24.1,
+          "cape_jkg": 1.0,
+          "cloud_ceiling_m": 2859.0,
+          "freezing_level_m": 3088.0,
+          "model_elevation_m": 2122.0,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 2.0,
+          "wind_dir_deg": 89.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.28
+        },
+        "gfs": {
+          "temp_c": 14.6,
+          "cloud_cover_pct": 63.0,
+          "wind_gust_kmh": 4.4,
+          "visibility_km": 24.13,
+          "cape_jkg": 7.0,
+          "cloud_ceiling_m": 2856.0,
+          "freezing_level_m": 2870.0,
+          "model_elevation_m": 1669.0,
+          "wind_speed_kmh": 3.9,
+          "wind_dir_deg": 156.0,
+          "precip_type": "none",
+          "grid_distance_km": 13.95
+        },
+        "ifs": {
+          "temp_c": 12.7,
+          "cloud_cover_pct": 98.0,
+          "cape_jkg": 1.0,
+          "precip_type_code": 1.0,
+          "wind_speed_kmh": 4.0,
+          "wind_dir_deg": 146.0,
+          "grid_distance_km": 13.95
+        },
+        "aifs": {
+          "temp_c": 12.5,
+          "cloud_cover_pct": 99.0,
+          "wind_speed_kmh": 3.3,
+          "wind_dir_deg": 149.0,
+          "grid_distance_km": 13.95
+        }
+      }
+    },
+    "rockwall_wolverine_pass": {
+      "route": "Rockwall",
+      "label": "Wolverine Pass, from GPX track",
+      "lat": 51.15406,
+      "lon": -116.2591,
+      "elevation_m": 2224,
+      "by_model": {
+        "hrdps": {
+          "temp_c": 5.4,
+          "cloud_cover_pct": 0.0,
+          "wind_speed_kmh": 3.4,
+          "wind_gust_kmh": 4.1,
+          "wind_dir_deg": 115.0,
+          "cape_jkg": null,
+          "model_elevation_m": 2259.0,
+          "grid_distance_km": 0.75
+        },
+        "rdps": {
+          "temp_c": 10.2,
+          "cloud_cover_pct": 56.0,
+          "wind_speed_kmh": 2.6,
+          "wind_gust_kmh": 3.7,
+          "wind_dir_deg": 171.0,
+          "cape_jkg": 37.0,
+          "grid_distance_km": 2.19
+        },
+        "gdps": {
+          "temp_c": 10.0,
+          "cloud_cover_pct": 68.0,
+          "wind_speed_kmh": 2.3,
+          "wind_gust_kmh": 5.7,
+          "wind_dir_deg": 152.0,
+          "cape_jkg": 32.0,
+          "grid_distance_km": 0.78
+        },
+        "raqdps": {
+          "pm25_ugm3": 0.2,
+          "pm25_wildfire_smoke_ugm3": 0.0,
+          "grid_distance_km": 6.33
+        },
+        "hrrr": {
+          "temp_c": 10.8,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 8.2,
+          "visibility_km": 29.6,
+          "cape_jkg": 40.0,
+          "cloud_ceiling_m": 3062.0,
+          "freezing_level_m": 3219.0,
+          "model_elevation_m": 2082.0,
+          "smoke_ugm3": 1.4,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 7.4,
+          "wind_dir_deg": 261.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.71
+        },
+        "rap": {
+          "temp_c": 11.9,
+          "cloud_cover_pct": 51.0,
+          "wind_gust_kmh": 11.2,
+          "visibility_km": 33.01,
+          "cape_jkg": 40.0,
+          "cloud_ceiling_m": 3147.0,
+          "freezing_level_m": 3267.0,
+          "model_elevation_m": 2021.0,
+          "smoke_ugm3": 1.5,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 9.1,
+          "wind_dir_deg": 205.0,
+          "precip_type": "none",
+          "grid_distance_km": 4.8
+        },
+        "nam": {
+          "temp_c": 9.6,
+          "cloud_cover_pct": 43.0,
+          "wind_gust_kmh": 4.7,
+          "visibility_km": 24.1,
+          "cape_jkg": 6.0,
+          "cloud_ceiling_m": 20000.0,
+          "freezing_level_m": 3114.0,
+          "model_elevation_m": 1909.0,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 5.8,
+          "wind_dir_deg": 121.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.66
+        },
+        "gfs": {
+          "temp_c": 7.5,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 2.9,
+          "visibility_km": 24.13,
+          "cape_jkg": 4.0,
+          "cloud_ceiling_m": 2797.0,
+          "freezing_level_m": 2872.0,
+          "model_elevation_m": 2145.0,
+          "wind_speed_kmh": 3.3,
+          "wind_dir_deg": 93.0,
+          "precip_type": "none",
+          "grid_distance_km": 10.69
+        },
+        "ifs": {
+          "temp_c": 8.2,
+          "cloud_cover_pct": 100.0,
+          "cape_jkg": 15.0,
+          "precip_type_code": 1.0,
+          "wind_speed_kmh": 5.8,
+          "wind_dir_deg": 123.0,
+          "grid_distance_km": 10.69
+        },
+        "aifs": {
+          "temp_c": 9.1,
+          "cloud_cover_pct": 100.0,
+          "wind_speed_kmh": 5.7,
+          "wind_dir_deg": 117.0,
+          "grid_distance_km": 10.69
+        }
+      }
+    },
+    "rockwall_rockwall_pass": {
+      "route": "Rockwall",
+      "label": "Rockwall Pass, near Paint Pots end, from GPX track",
+      "lat": 51.18695,
+      "lon": -116.28543,
+      "elevation_m": 2165,
+      "by_model": {
+        "hrdps": {
+          "temp_c": 5.4,
+          "cloud_cover_pct": 0.0,
+          "wind_speed_kmh": 4.2,
+          "wind_gust_kmh": 4.8,
+          "wind_dir_deg": 124.0,
+          "cape_jkg": null,
+          "model_elevation_m": 2285.0,
+          "grid_distance_km": 1.03
+        },
+        "rdps": {
+          "temp_c": 10.2,
+          "cloud_cover_pct": 56.0,
+          "wind_speed_kmh": 2.6,
+          "wind_gust_kmh": 3.7,
+          "wind_dir_deg": 171.0,
+          "cape_jkg": 37.0,
+          "grid_distance_km": 5.02
+        },
+        "gdps": {
+          "temp_c": 10.0,
+          "cloud_cover_pct": 68.0,
+          "wind_speed_kmh": 2.3,
+          "wind_gust_kmh": 5.7,
+          "wind_dir_deg": 152.0,
+          "cape_jkg": 32.0,
+          "grid_distance_km": 4.79
+        },
+        "raqdps": {
+          "pm25_ugm3": 0.2,
+          "pm25_wildfire_smoke_ugm3": 0.0,
+          "grid_distance_km": 5.03
+        },
+        "hrrr": {
+          "temp_c": 10.3,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 8.0,
+          "visibility_km": 25.4,
+          "cape_jkg": 50.0,
+          "cloud_ceiling_m": 3082.0,
+          "freezing_level_m": 3222.0,
+          "model_elevation_m": 2104.0,
+          "smoke_ugm3": 1.6,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 6.5,
+          "wind_dir_deg": 252.0,
+          "precip_type": "none",
+          "grid_distance_km": 0.47
+        },
+        "rap": {
+          "temp_c": 10.2,
+          "cloud_cover_pct": 43.0,
+          "wind_gust_kmh": 10.7,
+          "visibility_km": 28.71,
+          "cape_jkg": 80.0,
+          "cloud_ceiling_m": 3147.0,
+          "freezing_level_m": 3277.0,
+          "model_elevation_m": 2166.0,
+          "smoke_ugm3": 1.2,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 8.1,
+          "wind_dir_deg": 233.0,
+          "precip_type": "none",
+          "grid_distance_km": 5.9
+        },
+        "nam": {
+          "temp_c": 10.1,
+          "cloud_cover_pct": 33.0,
+          "wind_gust_kmh": 9.0,
+          "visibility_km": 24.1,
+          "cape_jkg": 13.0,
+          "cloud_ceiling_m": 20000.0,
+          "freezing_level_m": 3075.0,
+          "model_elevation_m": 1983.0,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 9.7,
+          "wind_dir_deg": 124.0,
+          "precip_type": "none",
+          "grid_distance_km": 0.52
+        },
+        "gfs": {
+          "temp_c": 7.5,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 2.9,
+          "visibility_km": 24.13,
+          "cape_jkg": 4.0,
+          "cloud_ceiling_m": 2797.0,
+          "freezing_level_m": 2872.0,
+          "model_elevation_m": 2145.0,
+          "wind_speed_kmh": 3.3,
+          "wind_dir_deg": 93.0,
+          "precip_type": "none",
+          "grid_distance_km": 7.43
+        },
+        "ifs": {
+          "temp_c": 8.2,
+          "cloud_cover_pct": 100.0,
+          "cape_jkg": 15.0,
+          "precip_type_code": 1.0,
+          "wind_speed_kmh": 5.8,
+          "wind_dir_deg": 123.0,
+          "grid_distance_km": 7.43
+        },
+        "aifs": {
+          "temp_c": 9.1,
+          "cloud_cover_pct": 100.0,
+          "wind_speed_kmh": 5.7,
+          "wind_dir_deg": 117.0,
+          "grid_distance_km": 7.43
+        }
+      }
+    },
+    "temple_loop_high_point": {
+      "route": "Mount Temple Loop",
+      "label": "high point on loop, from GPX track",
+      "lat": 51.34023,
+      "lon": -116.22116,
+      "elevation_m": 2581,
+      "by_model": {
+        "hrdps": {
+          "temp_c": 4.6,
+          "cloud_cover_pct": 0.0,
+          "wind_speed_kmh": 3.6,
+          "wind_gust_kmh": 4.6,
+          "wind_dir_deg": 130.0,
+          "cape_jkg": null,
+          "model_elevation_m": 2513.0,
+          "grid_distance_km": 0.77
+        },
+        "rdps": {
+          "temp_c": 9.8,
+          "cloud_cover_pct": 61.0,
+          "wind_speed_kmh": 2.3,
+          "wind_gust_kmh": 4.1,
+          "wind_dir_deg": 100.0,
+          "cape_jkg": 99.0,
+          "grid_distance_km": 1.89
+        },
+        "gdps": {
+          "temp_c": 9.6,
+          "cloud_cover_pct": 44.0,
+          "wind_speed_kmh": 2.3,
+          "wind_gust_kmh": 5.9,
+          "wind_dir_deg": 118.0,
+          "cape_jkg": 84.0,
+          "grid_distance_km": 4.9
+        },
+        "raqdps": {
+          "pm25_ugm3": 0.3,
+          "pm25_wildfire_smoke_ugm3": 0.0,
+          "grid_distance_km": 5.42
+        },
+        "hrrr": {
+          "temp_c": 9.8,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 8.9,
+          "visibility_km": 24.7,
+          "cape_jkg": 80.0,
+          "cloud_ceiling_m": 3091.0,
+          "freezing_level_m": 3214.0,
+          "model_elevation_m": 2113.0,
+          "smoke_ugm3": 1.1,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 7.3,
+          "wind_dir_deg": 246.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.33
+        },
+        "rap": {
+          "temp_c": 10.6,
+          "cloud_cover_pct": 83.0,
+          "wind_gust_kmh": 11.6,
+          "visibility_km": 28.51,
+          "cape_jkg": 100.0,
+          "cloud_ceiling_m": 3369.0,
+          "freezing_level_m": 3257.0,
+          "model_elevation_m": 2095.0,
+          "smoke_ugm3": 0.7,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 7.3,
+          "wind_dir_deg": 243.0,
+          "precip_type": "none",
+          "grid_distance_km": 2.6
+        },
+        "nam": {
+          "temp_c": 7.7,
+          "cloud_cover_pct": 38.0,
+          "wind_gust_kmh": 6.1,
+          "visibility_km": 24.1,
+          "cape_jkg": 49.0,
+          "cloud_ceiling_m": 20000.0,
+          "freezing_level_m": 3056.0,
+          "model_elevation_m": 2269.0,
+          "precip_1h_mm": 0.0,
+          "wind_speed_kmh": 7.9,
+          "wind_dir_deg": 126.0,
+          "precip_type": "none",
+          "grid_distance_km": 1.31
+        },
+        "gfs": {
+          "temp_c": 7.5,
+          "cloud_cover_pct": 100.0,
+          "wind_gust_kmh": 2.9,
+          "visibility_km": 24.13,
+          "cape_jkg": 4.0,
+          "cloud_ceiling_m": 2797.0,
+          "freezing_level_m": 2872.0,
+          "model_elevation_m": 2145.0,
+          "wind_speed_kmh": 3.3,
+          "wind_dir_deg": 93.0,
+          "precip_type": "none",
+          "grid_distance_km": 10.23
+        },
+        "ifs": {
+          "temp_c": 8.2,
+          "cloud_cover_pct": 100.0,
+          "cape_jkg": 15.0,
+          "precip_type_code": 1.0,
+          "wind_speed_kmh": 5.8,
+          "wind_dir_deg": 123.0,
+          "grid_distance_km": 10.23
+        },
+        "aifs": {
+          "temp_c": 9.1,
+          "cloud_cover_pct": 100.0,
+          "wind_speed_kmh": 5.7,
+          "wind_dir_deg": 117.0,
+          "grid_distance_km": 10.23
         }
       }
     }
