@@ -74,7 +74,11 @@ SURFACE_FIELDS = {
     "wind_direction_10m": ("wind_dir_deg", 1.0),
     "precipitation": ("precip_mm", 1.0),
     "snowfall": ("snowfall_cm", 1.0),
+    "precipitation_probability": ("precip_probability_pct", 1.0),
+    "weather_code": ("weather_code", 1.0),
     "cape": ("cape_jkg", 1.0),
+    "lifted_index": ("lifted_index", 1.0),
+    "convective_inhibition": ("cin_jkg", 1.0),
     "freezing_level_height": ("freezing_level_m", 1.0),
     "visibility": ("visibility_km", 0.001),  # metres -> km
 }
@@ -136,6 +140,36 @@ NOTE = (
     "route-level verdict, gate on the WORST point on that route, not an "
     "average of them: being clear at one pass is no comfort if another "
     "is socked in or above the freezing level.\n\n"
+    "DO NOT GATE ON CLOUD ALONE. Cloud at elevation answers \"can I see / "
+    "am I in the soup\", but it is one hazard among several and a route "
+    "can be clear and still be a bad idea. Weigh at minimum: PRECIPITATION "
+    "-- both how likely and HOW MUCH (precip_probability_pct is the "
+    "chance, precip_mm is the actual amount falling in that hour, and "
+    "snowfall_cm the snow depth in that hour; sum precip_mm across the "
+    "hours you will be out to get a total, since 8 hours of light rain "
+    "matters more than one heavy hour you can wait out) -- plus "
+    "THUNDERSTORM risk (see below), wind (wind_gust_kmh; exposed ridges "
+    "and passes are the worst place to be caught in gusts), "
+    "freezing_level_m relative to the location elevation (at or below it "
+    "means snow and ice underfoot rather than rain), visibility_km, and "
+    "wildfire smoke via the air_quality block. A sensible verdict weighs "
+    "all of these, not just whether the crux is in cloud.\n\n"
+    "THUNDERSTORMS -- especially important on exposed alpine ridges, where "
+    "there is no shelter, lightning is a genuine life-safety risk, and "
+    "storms typically build through the afternoon. Signals, strongest "
+    "first: weather_code of 95, 96 or 99 is an explicit thunderstorm "
+    "forecast; lifted_index below 0 means unstable (more negative is more "
+    "unstable; below -4 strongly so); cape_jkg rising through the day "
+    "indicates building instability (roughly: under 300 little risk, "
+    "300-1000 moderate, over 1000 significant); cin_jkg is the cap holding "
+    "storms back, so LOW cin_jkg alongside HIGH cape_jkg is the dangerous "
+    "combination. lifted_index and cin_jkg are GFS-family only. Prefer an "
+    "early start and a pre-planned bail when afternoon instability is "
+    "forecast.\n\n"
+    "weather_code follows the WMO convention: 0 clear, 1-3 increasingly "
+    "cloudy, 45/48 fog, 51-57 drizzle (56/57 freezing), 61-67 rain (66/67 "
+    "freezing), 71-77 snow, 80-82 rain showers, 85/86 snow showers, 95 "
+    "thunderstorm, 96/99 thunderstorm with hail.\n\n"
     "CLOUD AT TRAIL ELEVATION -- read this before judging whether a route "
     "is socked in. cloud_cover_at_elevation_pct is the important one: cloud "
     "cover interpolated to the location's REAL elevation, so it answers "
