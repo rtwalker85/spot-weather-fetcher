@@ -10,40 +10,94 @@
       "active": true
     },
     {
+      "id": "northover_ridge_high_point",
+      "route": "Northover Ridge",
+      "label": "ridge crest high point, from GPX track",
+      "lat": 50.59782,
+      "lon": -115.26796,
+      "elevation_m": 2788,
+      "active": true
+    },
+    {
+      "id": "ribbon_galatea_col",
+      "route": "Ribbon to Galatea",
+      "label": "high col between Ribbon and Galatea valleys, from GPX track",
+      "lat": 50.87635,
+      "lon": -115.25188,
+      "elevation_m": 2438,
+      "active": true
+    },
+    {
       "id": "tent_ridge_crux",
       "route": "Tent Ridge",
-      "label": "PLACEHOLDER — exposed ridge section, not trailhead. Needs real coordinates.",
-      "lat": null,
-      "lon": null,
-      "elevation_m": null,
-      "active": false
+      "label": "exposed ridge section (not trailhead), from GPX track",
+      "lat": 50.82022,
+      "lon": -115.37353,
+      "elevation_m": 2513,
+      "active": true
     },
     {
-      "id": "buller_pass",
-      "route": "Buller Loop",
-      "label": "PLACEHOLDER — North Buller pass. Needs real coordinates.",
-      "lat": null,
-      "lon": null,
-      "elevation_m": null,
-      "active": false
+      "id": "buller_pass_north",
+      "route": "Buller Pass Loop",
+      "label": "North Buller Pass, from GPX track",
+      "lat": 50.89304,
+      "lon": -115.27701,
+      "elevation_m": 2496,
+      "active": true
     },
     {
-      "id": "rockwall_south",
+      "id": "buller_pass_south",
+      "route": "Buller Pass Loop",
+      "label": "South Buller Pass (\"Buller Pass\"), from GPX track",
+      "lat": 50.8823,
+      "lon": -115.27344,
+      "elevation_m": 2501,
+      "active": true
+    },
+    {
+      "id": "rockwall_numa_pass",
       "route": "Rockwall",
-      "label": "PLACEHOLDER — Floe Lake side, high point. Needs real coordinates.",
-      "lat": null,
-      "lon": null,
-      "elevation_m": null,
-      "active": false
+      "label": "Numa Pass, near Floe Lake -- highest point on the trail, from GPX track",
+      "lat": 51.07319,
+      "lon": -116.14383,
+      "elevation_m": 2333,
+      "active": true
     },
     {
-      "id": "rockwall_north",
+      "id": "rockwall_tumbling_pass",
       "route": "Rockwall",
-      "label": "PLACEHOLDER — Numa/Tumbling pass area. Needs real coordinates.",
-      "lat": null,
-      "lon": null,
-      "elevation_m": null,
-      "active": false
+      "label": "Tumbling Pass, from GPX track",
+      "lat": 51.12481,
+      "lon": -116.23018,
+      "elevation_m": 2227,
+      "active": true
+    },
+    {
+      "id": "rockwall_wolverine_pass",
+      "route": "Rockwall",
+      "label": "Wolverine Pass, from GPX track",
+      "lat": 51.15406,
+      "lon": -116.2591,
+      "elevation_m": 2224,
+      "active": true
+    },
+    {
+      "id": "rockwall_rockwall_pass",
+      "route": "Rockwall",
+      "label": "Rockwall Pass, near Paint Pots end, from GPX track",
+      "lat": 51.18695,
+      "lon": -116.28543,
+      "elevation_m": 2165,
+      "active": true
+    },
+    {
+      "id": "temple_loop_high_point",
+      "route": "Mount Temple Loop",
+      "label": "high point on loop, from GPX track",
+      "lat": 51.34023,
+      "lon": -116.22116,
+      "elevation_m": 2581,
+      "active": true
     }
   ]
 }
