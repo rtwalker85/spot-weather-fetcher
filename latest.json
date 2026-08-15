@@ -1,12 +1,12 @@
 {
-  "generated_at_utc": "2026-08-15T02:53:14Z",
+  "generated_at_utc": "2026-08-15T03:45:36Z",
   "note": "This file is self-contained -- everything needed to interpret it is below or inline in each location/model entry; nothing here requires access to this repo's other files (e.g. locations.json).\n\nUNITS (encoded in each field's name suffix): _c = Celsius, _kmh = km/h, wind_dir_deg = degrees true, direction the wind is coming FROM. _pct = percent. _km = kilometers. _m = meters. _mm = millimeters (1h accumulation). _ugm3 = micrograms per cubic meter. cape_jkg = J/kg (convective available potential energy, a thunderstorm/instability indicator -- 0 is stable, higher is more unstable).\n\ngrid_distance_km is how far this location actually is from the nearest grid cell the model sampled -- smaller means that model's reading is more locally representative of this exact point; larger (several km or more) means treat that particular model's numbers for this point with more caution.\n\nDifferent models publish different variables -- a location's entry for a given model only includes what that model actually provides (e.g. only HRRR/RAP/NAM/GFS publish a direct cloud-ceiling height and freezing level; HRDPS/RDPS/GDPS do not).\n\nmodel_elevation_m is what that model's own terrain grid thinks the elevation is at the matched point -- compare it against this same location's own elevation_m field (listed alongside by_model, not a separate file) to gauge how much a coarse grid may be smoothing over sharp terrain. A large gap means that model's temperature and freezing-level readings are likely biased toward its own (usually lower) elevation, not the real one.\n\nEach entry under \"models\" has its own run_utc (when that model's forecast was issued) and forecast_valid_utc (the time the forecast is actually for) -- these are NOT synchronized across models. Each model independently grabs its freshest available run and shortest reasonable lead time, so one model's reading might be for right now while another's is for several hours from now. Check forecast_valid_utc per model before treating two models' numbers for the same location as directly comparable.\n\nPrecipitation TYPE is only included for the US bundled models (rain/snow/freezing_rain/ice_pellets flags are unambiguous); the Canadian per-file models' PTYPE-style numeric codes are deferred until verified against a real code table.\n\nA null cloud_ceiling_m means the model found no defined cloud base (effectively clear / unlimited ceiling), not that the reading is missing. cape_jkg is null when the model reports a negative sentinel (no instability data) rather than a real value, since CAPE can't physically be negative.\n\nThis file only includes locations currently tracked as active in the pipeline's config -- if a route or point you expect isn't listed under \"locations\" below, it isn't tracked yet; it isn't that its fetch failed.",
   "models": {
     "hrdps": {
       "label": "HRDPS Continental (Canada, 2.5km)",
       "status": "ok",
-      "run_utc": "2026-08-14T18:00:00Z",
-      "forecast_valid_utc": "2026-08-14T18:00:00Z"
+      "run_utc": "2026-08-15T00:00:00Z",
+      "forecast_valid_utc": "2026-08-15T00:00:00Z"
     },
     "rdps": {
       "label": "RDPS (Canada, 10km)",
@@ -23,8 +23,8 @@
     "raqdps": {
       "label": "RAQDPS (Canada air quality / wildfire smoke, 10km)",
       "status": "ok",
-      "run_utc": "2026-08-14T12:00:00Z",
-      "forecast_valid_utc": "2026-08-14T18:00:00Z"
+      "run_utc": "2026-08-15T00:00:00Z",
+      "forecast_valid_utc": "2026-08-15T00:00:00Z"
     },
     "hrrr": {
       "label": "HRRR (US, 3km)",
@@ -47,8 +47,8 @@
     "gfs": {
       "label": "GFS (US global, 0.25deg)",
       "status": "ok",
-      "run_utc": "2026-08-14T18:00:00Z",
-      "forecast_valid_utc": "2026-08-14T18:00:00Z"
+      "run_utc": "2026-08-15T00:00:00Z",
+      "forecast_valid_utc": "2026-08-15T00:00:00Z"
     },
     "ifs": {
       "label": "ECMWF IFS (global, 0.25deg)",
@@ -72,12 +72,12 @@
       "elevation_m": 1309,
       "by_model": {
         "hrdps": {
-          "temp_c": 9.1,
+          "temp_c": 13.7,
           "cloud_cover_pct": 0.0,
-          "wind_speed_kmh": 1.6,
-          "wind_gust_kmh": 3.9,
-          "wind_dir_deg": 121.0,
-          "cape_jkg": null,
+          "wind_speed_kmh": 6.5,
+          "wind_gust_kmh": 10.1,
+          "wind_dir_deg": 127.0,
+          "cape_jkg": 126.0,
           "model_elevation_m": 1521.0,
           "grid_distance_km": 1.49
         },
@@ -100,8 +100,7 @@
           "grid_distance_km": 6.83
         },
         "raqdps": {
-          "pm25_ugm3": 0.6,
-          "pm25_wildfire_smoke_ugm3": 0.0,
+          "pm25_ugm3": 1.2,
           "grid_distance_km": 5.0
         },
         "hrrr": {
@@ -152,17 +151,17 @@
           "grid_distance_km": 1.05
         },
         "gfs": {
-          "temp_c": 6.1,
-          "cloud_cover_pct": 100.0,
+          "temp_c": 10.1,
+          "cloud_cover_pct": 93.0,
           "wind_gust_kmh": 3.3,
-          "visibility_km": 24.13,
-          "cape_jkg": 12.0,
-          "cloud_ceiling_m": 2006.0,
-          "freezing_level_m": 2733.0,
+          "visibility_km": 24.14,
+          "cape_jkg": 35.0,
+          "cloud_ceiling_m": 2511.0,
+          "freezing_level_m": 3110.0,
           "model_elevation_m": 1917.0,
-          "wind_speed_kmh": 3.7,
-          "wind_dir_deg": 73.0,
-          "precip_type": "rain",
+          "wind_speed_kmh": 4.8,
+          "wind_dir_deg": 100.0,
+          "precip_type": "none",
           "grid_distance_km": 12.04
         },
         "ifs": {
@@ -191,12 +190,12 @@
       "elevation_m": 2788,
       "by_model": {
         "hrdps": {
-          "temp_c": 4.4,
+          "temp_c": 6.5,
           "cloud_cover_pct": 0.0,
-          "wind_speed_kmh": 0.5,
-          "wind_gust_kmh": 0.5,
-          "wind_dir_deg": 40.0,
-          "cape_jkg": null,
+          "wind_speed_kmh": 2.1,
+          "wind_gust_kmh": 2.1,
+          "wind_dir_deg": 315.0,
+          "cape_jkg": 44.0,
           "model_elevation_m": 2342.0,
           "grid_distance_km": 1.6
         },
@@ -219,8 +218,7 @@
           "grid_distance_km": 7.16
         },
         "raqdps": {
-          "pm25_ugm3": 0.3,
-          "pm25_wildfire_smoke_ugm3": 0.0,
+          "pm25_ugm3": 0.8,
           "grid_distance_km": 2.41
         },
         "hrrr": {
@@ -271,17 +269,17 @@
           "grid_distance_km": 1.21
         },
         "gfs": {
-          "temp_c": 6.2,
-          "cloud_cover_pct": 100.0,
-          "wind_gust_kmh": 5.1,
-          "visibility_km": 23.35,
-          "cape_jkg": 10.0,
-          "cloud_ceiling_m": 2333.0,
-          "freezing_level_m": 2880.0,
+          "temp_c": 8.2,
+          "cloud_cover_pct": 95.0,
+          "wind_gust_kmh": 2.6,
+          "visibility_km": 24.14,
+          "cape_jkg": 28.0,
+          "cloud_ceiling_m": 2595.0,
+          "freezing_level_m": 3112.0,
           "model_elevation_m": 2111.0,
-          "wind_speed_kmh": 4.3,
-          "wind_dir_deg": 99.0,
-          "precip_type": "rain",
+          "wind_speed_kmh": 3.6,
+          "wind_dir_deg": 114.0,
+          "precip_type": "none",
           "grid_distance_km": 10.95
         },
         "ifs": {
@@ -310,12 +308,12 @@
       "elevation_m": 2438,
       "by_model": {
         "hrdps": {
-          "temp_c": 3.0,
+          "temp_c": 5.1,
           "cloud_cover_pct": 0.0,
-          "wind_speed_kmh": 2.0,
-          "wind_gust_kmh": 2.0,
-          "wind_dir_deg": 74.0,
-          "cape_jkg": null,
+          "wind_speed_kmh": 3.2,
+          "wind_gust_kmh": 4.0,
+          "wind_dir_deg": 96.0,
+          "cape_jkg": 48.0,
           "model_elevation_m": 2378.0,
           "grid_distance_km": 0.24
         },
@@ -338,8 +336,7 @@
           "grid_distance_km": 4.67
         },
         "raqdps": {
-          "pm25_ugm3": 0.3,
-          "pm25_wildfire_smoke_ugm3": 0.0,
+          "pm25_ugm3": 0.6,
           "grid_distance_km": 1.68
         },
         "hrrr": {
@@ -390,17 +387,17 @@
           "grid_distance_km": 1.3
         },
         "gfs": {
-          "temp_c": 6.1,
-          "cloud_cover_pct": 100.0,
+          "temp_c": 10.1,
+          "cloud_cover_pct": 93.0,
           "wind_gust_kmh": 3.3,
-          "visibility_km": 24.13,
-          "cape_jkg": 12.0,
-          "cloud_ceiling_m": 2006.0,
-          "freezing_level_m": 2733.0,
+          "visibility_km": 24.14,
+          "cape_jkg": 35.0,
+          "cloud_ceiling_m": 2511.0,
+          "freezing_level_m": 3110.0,
           "model_elevation_m": 1917.0,
-          "wind_speed_kmh": 3.7,
-          "wind_dir_deg": 73.0,
-          "precip_type": "rain",
+          "wind_speed_kmh": 4.8,
+          "wind_dir_deg": 100.0,
+          "precip_type": "none",
           "grid_distance_km": 13.75
         },
         "ifs": {
@@ -429,12 +426,12 @@
       "elevation_m": 2513,
       "by_model": {
         "hrdps": {
-          "temp_c": 6.1,
+          "temp_c": 7.9,
           "cloud_cover_pct": 0.0,
-          "wind_speed_kmh": 1.8,
-          "wind_gust_kmh": 4.3,
-          "wind_dir_deg": 62.0,
-          "cape_jkg": null,
+          "wind_speed_kmh": 1.2,
+          "wind_gust_kmh": 1.8,
+          "wind_dir_deg": 58.0,
+          "cape_jkg": 53.0,
           "model_elevation_m": 2104.0,
           "grid_distance_km": 1.5
         },
@@ -457,8 +454,7 @@
           "grid_distance_km": 3.7
         },
         "raqdps": {
-          "pm25_ugm3": 0.2,
-          "pm25_wildfire_smoke_ugm3": 0.0,
+          "pm25_ugm3": 0.9,
           "grid_distance_km": 2.08
         },
         "hrrr": {
@@ -509,16 +505,16 @@
           "grid_distance_km": 0.57
         },
         "gfs": {
-          "temp_c": 5.6,
+          "temp_c": 7.3,
           "cloud_cover_pct": 100.0,
-          "wind_gust_kmh": 5.1,
-          "visibility_km": 24.13,
-          "cape_jkg": 8.0,
-          "cloud_ceiling_m": 2488.0,
-          "freezing_level_m": 2750.0,
+          "wind_gust_kmh": 2.9,
+          "visibility_km": 24.14,
+          "cape_jkg": 19.0,
+          "cloud_ceiling_m": 2738.0,
+          "freezing_level_m": 3111.0,
           "model_elevation_m": 2183.0,
-          "wind_speed_kmh": 3.4,
-          "wind_dir_deg": 78.0,
+          "wind_speed_kmh": 3.7,
+          "wind_dir_deg": 144.0,
           "precip_type": "none",
           "grid_distance_km": 11.68
         },
@@ -548,12 +544,12 @@
       "elevation_m": 2496,
       "by_model": {
         "hrdps": {
-          "temp_c": 4.2,
+          "temp_c": 6.6,
           "cloud_cover_pct": 0.0,
-          "wind_speed_kmh": 2.1,
-          "wind_gust_kmh": 2.9,
-          "wind_dir_deg": 66.0,
-          "cape_jkg": null,
+          "wind_speed_kmh": 1.7,
+          "wind_gust_kmh": 1.7,
+          "wind_dir_deg": 84.0,
+          "cape_jkg": 40.0,
           "model_elevation_m": 2319.0,
           "grid_distance_km": 1.22
         },
@@ -576,8 +572,7 @@
           "grid_distance_km": 7.01
         },
         "raqdps": {
-          "pm25_ugm3": 0.3,
-          "pm25_wildfire_smoke_ugm3": 0.0,
+          "pm25_ugm3": 0.6,
           "grid_distance_km": 3.55
         },
         "hrrr": {
@@ -628,17 +623,17 @@
           "grid_distance_km": 1.44
         },
         "gfs": {
-          "temp_c": 6.1,
-          "cloud_cover_pct": 100.0,
+          "temp_c": 10.1,
+          "cloud_cover_pct": 93.0,
           "wind_gust_kmh": 3.3,
-          "visibility_km": 24.13,
-          "cape_jkg": 12.0,
-          "cloud_ceiling_m": 2006.0,
-          "freezing_level_m": 2733.0,
+          "visibility_km": 24.14,
+          "cape_jkg": 35.0,
+          "cloud_ceiling_m": 2511.0,
+          "freezing_level_m": 3110.0,
           "model_elevation_m": 1917.0,
-          "wind_speed_kmh": 3.7,
-          "wind_dir_deg": 73.0,
-          "precip_type": "rain",
+          "wind_speed_kmh": 4.8,
+          "wind_dir_deg": 100.0,
+          "precip_type": "none",
           "grid_distance_km": 12.04
         },
         "ifs": {
@@ -667,12 +662,12 @@
       "elevation_m": 2501,
       "by_model": {
         "hrdps": {
-          "temp_c": 3.7,
+          "temp_c": 5.9,
           "cloud_cover_pct": 0.0,
-          "wind_speed_kmh": 2.0,
-          "wind_gust_kmh": 2.5,
-          "wind_dir_deg": 72.0,
-          "cape_jkg": null,
+          "wind_speed_kmh": 1.9,
+          "wind_gust_kmh": 1.9,
+          "wind_dir_deg": 84.0,
+          "cape_jkg": 39.0,
           "model_elevation_m": 2386.0,
           "grid_distance_km": 1.3
         },
@@ -695,8 +690,7 @@
           "grid_distance_km": 6.28
         },
         "raqdps": {
-          "pm25_ugm3": 0.3,
-          "pm25_wildfire_smoke_ugm3": 0.0,
+          "pm25_ugm3": 0.6,
           "grid_distance_km": 2.34
         },
         "hrrr": {
@@ -747,17 +741,17 @@
           "grid_distance_km": 1.17
         },
         "gfs": {
-          "temp_c": 6.1,
-          "cloud_cover_pct": 100.0,
+          "temp_c": 10.1,
+          "cloud_cover_pct": 93.0,
           "wind_gust_kmh": 3.3,
-          "visibility_km": 24.13,
-          "cape_jkg": 12.0,
-          "cloud_ceiling_m": 2006.0,
-          "freezing_level_m": 2733.0,
+          "visibility_km": 24.14,
+          "cape_jkg": 35.0,
+          "cloud_ceiling_m": 2511.0,
+          "freezing_level_m": 3110.0,
           "model_elevation_m": 1917.0,
-          "wind_speed_kmh": 3.7,
-          "wind_dir_deg": 73.0,
-          "precip_type": "rain",
+          "wind_speed_kmh": 4.8,
+          "wind_dir_deg": 100.0,
+          "precip_type": "none",
           "grid_distance_km": 13.19
         },
         "ifs": {
@@ -786,12 +780,12 @@
       "elevation_m": 2333,
       "by_model": {
         "hrdps": {
-          "temp_c": 5.1,
+          "temp_c": 9.8,
           "cloud_cover_pct": 0.0,
-          "wind_speed_kmh": 3.3,
-          "wind_gust_kmh": 4.3,
-          "wind_dir_deg": 116.0,
-          "cape_jkg": null,
+          "wind_speed_kmh": 4.9,
+          "wind_gust_kmh": 6.2,
+          "wind_dir_deg": 157.0,
+          "cape_jkg": 102.0,
           "model_elevation_m": 2300.0,
           "grid_distance_km": 0.54
         },
@@ -814,8 +808,7 @@
           "grid_distance_km": 8.7
         },
         "raqdps": {
-          "pm25_ugm3": 0.2,
-          "pm25_wildfire_smoke_ugm3": 0.0,
+          "pm25_ugm3": 0.5,
           "grid_distance_km": 2.89
         },
         "hrrr": {
@@ -866,16 +859,16 @@
           "grid_distance_km": 1.17
         },
         "gfs": {
-          "temp_c": 14.6,
-          "cloud_cover_pct": 63.0,
-          "wind_gust_kmh": 4.4,
-          "visibility_km": 24.13,
-          "cape_jkg": 7.0,
-          "cloud_ceiling_m": 2856.0,
-          "freezing_level_m": 2870.0,
+          "temp_c": 15.8,
+          "cloud_cover_pct": 22.0,
+          "wind_gust_kmh": 6.9,
+          "visibility_km": 24.14,
+          "cape_jkg": 15.0,
+          "cloud_ceiling_m": 19996.0,
+          "freezing_level_m": 3198.0,
           "model_elevation_m": 1669.0,
-          "wind_speed_kmh": 3.9,
-          "wind_dir_deg": 156.0,
+          "wind_speed_kmh": 9.4,
+          "wind_dir_deg": 147.0,
           "precip_type": "none",
           "grid_distance_km": 11.02
         },
@@ -905,12 +898,12 @@
       "elevation_m": 2227,
       "by_model": {
         "hrdps": {
-          "temp_c": 5.3,
+          "temp_c": 10.2,
           "cloud_cover_pct": 0.0,
-          "wind_speed_kmh": 2.8,
-          "wind_gust_kmh": 3.8,
-          "wind_dir_deg": 120.0,
-          "cape_jkg": null,
+          "wind_speed_kmh": 5.0,
+          "wind_gust_kmh": 6.1,
+          "wind_dir_deg": 182.0,
+          "cape_jkg": 140.0,
           "model_elevation_m": 2267.0,
           "grid_distance_km": 1.05
         },
@@ -933,8 +926,7 @@
           "grid_distance_km": 3.12
         },
         "raqdps": {
-          "pm25_ugm3": 0.2,
-          "pm25_wildfire_smoke_ugm3": 0.0,
+          "pm25_ugm3": 0.4,
           "grid_distance_km": 4.09
         },
         "hrrr": {
@@ -985,16 +977,16 @@
           "grid_distance_km": 1.28
         },
         "gfs": {
-          "temp_c": 14.6,
-          "cloud_cover_pct": 63.0,
-          "wind_gust_kmh": 4.4,
-          "visibility_km": 24.13,
-          "cape_jkg": 7.0,
-          "cloud_ceiling_m": 2856.0,
-          "freezing_level_m": 2870.0,
+          "temp_c": 15.8,
+          "cloud_cover_pct": 22.0,
+          "wind_gust_kmh": 6.9,
+          "visibility_km": 24.14,
+          "cape_jkg": 15.0,
+          "cloud_ceiling_m": 19996.0,
+          "freezing_level_m": 3198.0,
           "model_elevation_m": 1669.0,
-          "wind_speed_kmh": 3.9,
-          "wind_dir_deg": 156.0,
+          "wind_speed_kmh": 9.4,
+          "wind_dir_deg": 147.0,
           "precip_type": "none",
           "grid_distance_km": 13.95
         },
@@ -1024,12 +1016,12 @@
       "elevation_m": 2224,
       "by_model": {
         "hrdps": {
-          "temp_c": 5.4,
+          "temp_c": 10.3,
           "cloud_cover_pct": 0.0,
-          "wind_speed_kmh": 3.4,
-          "wind_gust_kmh": 4.1,
-          "wind_dir_deg": 115.0,
-          "cape_jkg": null,
+          "wind_speed_kmh": 5.1,
+          "wind_gust_kmh": 6.3,
+          "wind_dir_deg": 186.0,
+          "cape_jkg": 141.0,
           "model_elevation_m": 2259.0,
           "grid_distance_km": 0.75
         },
@@ -1052,8 +1044,7 @@
           "grid_distance_km": 0.78
         },
         "raqdps": {
-          "pm25_ugm3": 0.2,
-          "pm25_wildfire_smoke_ugm3": 0.0,
+          "pm25_ugm3": 0.4,
           "grid_distance_km": 6.33
         },
         "hrrr": {
@@ -1104,16 +1095,16 @@
           "grid_distance_km": 1.66
         },
         "gfs": {
-          "temp_c": 7.5,
-          "cloud_cover_pct": 100.0,
-          "wind_gust_kmh": 2.9,
-          "visibility_km": 24.13,
-          "cape_jkg": 4.0,
-          "cloud_ceiling_m": 2797.0,
-          "freezing_level_m": 2872.0,
+          "temp_c": 11.2,
+          "cloud_cover_pct": 15.0,
+          "wind_gust_kmh": 6.2,
+          "visibility_km": 24.14,
+          "cape_jkg": 15.0,
+          "cloud_ceiling_m": 19607.0,
+          "freezing_level_m": 3256.0,
           "model_elevation_m": 2145.0,
-          "wind_speed_kmh": 3.3,
-          "wind_dir_deg": 93.0,
+          "wind_speed_kmh": 6.1,
+          "wind_dir_deg": 145.0,
           "precip_type": "none",
           "grid_distance_km": 10.69
         },
@@ -1143,12 +1134,12 @@
       "elevation_m": 2165,
       "by_model": {
         "hrdps": {
-          "temp_c": 5.4,
+          "temp_c": 10.1,
           "cloud_cover_pct": 0.0,
-          "wind_speed_kmh": 4.2,
-          "wind_gust_kmh": 4.8,
-          "wind_dir_deg": 124.0,
-          "cape_jkg": null,
+          "wind_speed_kmh": 5.5,
+          "wind_gust_kmh": 6.5,
+          "wind_dir_deg": 190.0,
+          "cape_jkg": 168.0,
           "model_elevation_m": 2285.0,
           "grid_distance_km": 1.03
         },
@@ -1171,8 +1162,7 @@
           "grid_distance_km": 4.79
         },
         "raqdps": {
-          "pm25_ugm3": 0.2,
-          "pm25_wildfire_smoke_ugm3": 0.0,
+          "pm25_ugm3": 0.5,
           "grid_distance_km": 5.03
         },
         "hrrr": {
@@ -1223,16 +1213,16 @@
           "grid_distance_km": 0.52
         },
         "gfs": {
-          "temp_c": 7.5,
-          "cloud_cover_pct": 100.0,
-          "wind_gust_kmh": 2.9,
-          "visibility_km": 24.13,
-          "cape_jkg": 4.0,
-          "cloud_ceiling_m": 2797.0,
-          "freezing_level_m": 2872.0,
+          "temp_c": 11.2,
+          "cloud_cover_pct": 15.0,
+          "wind_gust_kmh": 6.2,
+          "visibility_km": 24.14,
+          "cape_jkg": 15.0,
+          "cloud_ceiling_m": 19607.0,
+          "freezing_level_m": 3256.0,
           "model_elevation_m": 2145.0,
-          "wind_speed_kmh": 3.3,
-          "wind_dir_deg": 93.0,
+          "wind_speed_kmh": 6.1,
+          "wind_dir_deg": 145.0,
           "precip_type": "none",
           "grid_distance_km": 7.43
         },
@@ -1262,12 +1252,12 @@
       "elevation_m": 2581,
       "by_model": {
         "hrdps": {
-          "temp_c": 4.6,
+          "temp_c": 8.2,
           "cloud_cover_pct": 0.0,
-          "wind_speed_kmh": 3.6,
-          "wind_gust_kmh": 4.6,
-          "wind_dir_deg": 130.0,
-          "cape_jkg": null,
+          "wind_speed_kmh": 0.6,
+          "wind_gust_kmh": 0.8,
+          "wind_dir_deg": 65.0,
+          "cape_jkg": 108.0,
           "model_elevation_m": 2513.0,
           "grid_distance_km": 0.77
         },
@@ -1290,8 +1280,7 @@
           "grid_distance_km": 4.9
         },
         "raqdps": {
-          "pm25_ugm3": 0.3,
-          "pm25_wildfire_smoke_ugm3": 0.0,
+          "pm25_ugm3": 0.5,
           "grid_distance_km": 5.42
         },
         "hrrr": {
@@ -1342,16 +1331,16 @@
           "grid_distance_km": 1.31
         },
         "gfs": {
-          "temp_c": 7.5,
-          "cloud_cover_pct": 100.0,
-          "wind_gust_kmh": 2.9,
-          "visibility_km": 24.13,
-          "cape_jkg": 4.0,
-          "cloud_ceiling_m": 2797.0,
-          "freezing_level_m": 2872.0,
+          "temp_c": 11.2,
+          "cloud_cover_pct": 15.0,
+          "wind_gust_kmh": 6.2,
+          "visibility_km": 24.14,
+          "cape_jkg": 15.0,
+          "cloud_ceiling_m": 19607.0,
+          "freezing_level_m": 3256.0,
           "model_elevation_m": 2145.0,
-          "wind_speed_kmh": 3.3,
-          "wind_dir_deg": 93.0,
+          "wind_speed_kmh": 6.1,
+          "wind_dir_deg": 145.0,
           "precip_type": "none",
           "grid_distance_km": 10.23
         },
