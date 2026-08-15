@@ -2,12 +2,11 @@ name: Fetch weather data
 
 on:
   schedule:
-    # Runs hourly. Mountain weather changes fast, and GitHub Actions minutes
-    # are free/unlimited on public repos, so there's no cost to checking
-    # often. Each model in fetch_weather.py independently figures out its
-    # own freshest available run -- polling hourly just means we always
-    # grab the shortest (most accurate) lead time available at that moment,
-    # even for models that only update every 6-12 hours themselves.
+    # Hourly. Mountain weather changes fast, the whole run costs ~4 seconds
+    # and 3 API calls, and GitHub Actions is free on public repos -- so
+    # there's no reason to check less often. Short-range models (HRDPS,
+    # HRRR) refresh frequently and are the ones that matter most for
+    # next-day planning.
     - cron: "0 * * * *"
   workflow_dispatch: {}
 
@@ -28,7 +27,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run fetch_weather.py
-        timeout-minutes: 15
+        # Three API calls, ~4 seconds. The ceiling is only here so a hung
+        # request can't leave the job running indefinitely.
+        timeout-minutes: 5
         run: python fetch_weather.py
 
       - name: Commit and push latest.json
