@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-15T04:29:06Z",
+  "generated_at_utc": "2026-08-15T04:29:38Z",
   "source": "Open-Meteo (per-model point forecasts; CAMS for air quality)",
   "note": "This file is self-contained -- everything needed to interpret it is below or inline in each location/model entry; nothing here requires access to this repo's other files (e.g. locations.json).\n\nFORECAST SERIES, NOT A SNAPSHOT: every model provides hourly readings covering up to 5 days ahead, in each location's by_model.<model>.readings array (chronological, one entry per hour). Models differ in how far ahead they forecast at all -- HRRR and HRDPS are short-range (roughly 2 days) but highest resolution and best for next-day planning; GFS, GDPS and ECMWF reach the full 5 days at coarser resolution. A model's series simply ends when its forecast does. Check checkpoint_count / earliest_valid_utc / latest_valid_utc under \"models\" for each model's actual coverage.\n\nUSING THIS FOR TRIP PLANNING -- the models are deliberately kept separate rather than blended, because the SPREAD BETWEEN THEM IS ITSELF THE SIGNAL. When models agree closely, the forecast is confident; when they disagree (say cloud-at-elevation ranging 15-55 percent, or temperature spanning 3+ degrees), that is genuine forecast uncertainty and should be surfaced as such rather than averaged into a single number that hides it. For a go/no-go call, prefer reporting the range, or the worst case, over the mean.\n\nWHICH MODELS TO WEIGHT, BY HOW FAR OUT: for today and tomorrow, prefer HRDPS (2.5km) and HRRR (3km) -- they have much finer terrain resolution, which matters enormously in steep alpine country, and they are what a human would check for next-day planning. They only reach ~2 days out. For days 3-5, only GDPS, GFS and the ECMWF models still have data; treat those as a coarser trend (is a system moving in, is the freezing level rising or falling) rather than as hour-specific detail, and expect them to be revised as the date approaches.\n\nROUTES CAN HAVE SEVERAL TRACKED POINTS: locations each carry a \"route\" field, and more than one location can share it -- route \"Rockwall\" has four passes and \"Buller Pass Loop\" has two, because conditions differ meaningfully along a long traverse. For a route-level verdict, gate on the WORST point on that route, not an average of them: being clear at one pass is no comfort if another is socked in or above the freezing level.\n\nCLOUD AT TRAIL ELEVATION -- read this before judging whether a route is socked in. cloud_cover_at_elevation_pct is the important one: cloud cover interpolated to the location's REAL elevation, so it answers 'is this specific ridge/pass in cloud right now'. Prefer it over the others for go/no-go calls. The plain cloud_cover_pct (whole-column) and cloud_cover_low/mid/high_pct fields are ambiguous in mountains: cloud_cover_low_pct = 100 at a 2700m ridge can mean socked in, OR can mean the point is in sunshine above a valley inversion. Comparing cloud_cover_at_elevation_pct against cloud_cover_low_pct distinguishes those two cases. Not every model publishes pressure-level cloud (ECMWF IFS/AIFS do not), so that field is absent for those models.\n\nUNITS (encoded in each field's name suffix): _c = Celsius. _kmh = km/h. wind_dir_deg = degrees true, the direction wind blows FROM. _pct = percent. _km = kilometres. _m = metres. _mm = millimetres (precipitation in that hour). _cm = centimetres (snowfall in that hour). _ugm3 = micrograms per cubic metre. cape_jkg = J/kg (instability / thunderstorm potential; 0 is stable, higher is more unstable). us_aqi is the US Air Quality Index scale. aerosol_optical_depth is unitless and is a useful wildfire-smoke haze indicator.\n\nDifferent models publish different variables -- a model's readings only include what that model actually provides. visibility_km and freezing_level_m are GFS-family only. Air-quality fields (pm2_5, pm10, us_aqi, aerosol_optical_depth) come from a separate global forecast (CAMS) and are therefore listed ONCE per location under air_quality, not repeated per weather model. Check the top-level air_quality_status field: if it is not \"ok\", that upstream service failed this run and the air_quality blocks are absent -- that is a temporary fetch failure, NOT a reading of clean air.\n\nforecast_elevation_m and grid_distance_km sit at the LOCATION level (not per model) because every model for a location is resolved to the same downscaled grid point: forecast_elevation_m is the elevation the forecast was resolved at, and grid_distance_km is how far that point sits from the requested coordinates. Compare forecast_elevation_m against this location's own elevation_m to judge how well the terrain was captured -- a large gap means temperature and freezing-level values are biased toward the resolved elevation rather than the real one. In practice these agree closely (tens of metres) even on sharp ridges.\n\nValues are downscaled and elevation-corrected rather than being raw model grid output. In steep terrain this is materially more accurate for a specific point than the underlying coarse grid would be.\n\nThis file only includes locations currently tracked as active in the pipeline's config -- if a route or point you expect isn't listed under \"locations\" below, it isn't tracked yet; that is not a fetch failure.",
   "air_quality_status": "ok",
@@ -8,8 +8,8 @@
       "label": "HRDPS Continental (Canada, 2.5km)",
       "status": "ok",
       "earliest_valid_utc": "2026-08-15T00:00Z",
-      "latest_valid_utc": "2026-08-16T18:00Z",
-      "checkpoint_count": 43
+      "latest_valid_utc": "2026-08-17T00:00Z",
+      "checkpoint_count": 49
     },
     "gem_regional": {
       "label": "RDPS (Canada regional, 10km)",
@@ -617,7 +617,7 @@
               "wind_dir_deg": 231,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 10.0
+              "cape_jkg": 30.0
             },
             {
               "valid_time_utc": "2026-08-16T13:00Z",
@@ -632,7 +632,7 @@
               "wind_dir_deg": 229,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 10.0
+              "cape_jkg": 20.0
             },
             {
               "valid_time_utc": "2026-08-16T14:00Z",
@@ -647,7 +647,7 @@
               "wind_dir_deg": 223,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 10.0
+              "cape_jkg": 20.0
             },
             {
               "valid_time_utc": "2026-08-16T15:00Z",
@@ -662,7 +662,7 @@
               "wind_dir_deg": 241,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 10.0
+              "cape_jkg": 30.0
             },
             {
               "valid_time_utc": "2026-08-16T16:00Z",
@@ -677,7 +677,7 @@
               "wind_dir_deg": 2,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 150.0
+              "cape_jkg": 230.0
             },
             {
               "valid_time_utc": "2026-08-16T17:00Z",
@@ -692,7 +692,7 @@
               "wind_dir_deg": 359,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 500.0
+              "cape_jkg": 590.0
             },
             {
               "valid_time_utc": "2026-08-16T18:00Z",
@@ -707,7 +707,31 @@
               "wind_dir_deg": 354,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 860.0
+              "cape_jkg": 980.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T19:00Z",
+              "cape_jkg": 1540.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T20:00Z",
+              "cape_jkg": 820.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T21:00Z",
+              "cape_jkg": 1100.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T22:00Z",
+              "cape_jkg": 1320.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T23:00Z",
+              "cape_jkg": 550.0
+            },
+            {
+              "valid_time_utc": "2026-08-17T00:00Z",
+              "cape_jkg": 540.0
             }
           ]
         },
@@ -11092,7 +11116,7 @@
               "wind_dir_deg": 198,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 50.0
+              "cape_jkg": 30.0
             },
             {
               "valid_time_utc": "2026-08-16T13:00Z",
@@ -11107,7 +11131,7 @@
               "wind_dir_deg": 198,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 50.0
+              "cape_jkg": 10.0
             },
             {
               "valid_time_utc": "2026-08-16T14:00Z",
@@ -11122,7 +11146,7 @@
               "wind_dir_deg": 197,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 40.0
+              "cape_jkg": 10.0
             },
             {
               "valid_time_utc": "2026-08-16T15:00Z",
@@ -11152,7 +11176,7 @@
               "wind_dir_deg": 226,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 240.0
+              "cape_jkg": 190.0
             },
             {
               "valid_time_utc": "2026-08-16T17:00Z",
@@ -11167,7 +11191,7 @@
               "wind_dir_deg": 224,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 480.0
+              "cape_jkg": 510.0
             },
             {
               "valid_time_utc": "2026-08-16T18:00Z",
@@ -11182,7 +11206,31 @@
               "wind_dir_deg": 229,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 690.0
+              "cape_jkg": 860.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T19:00Z",
+              "cape_jkg": 940.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T20:00Z",
+              "cape_jkg": 560.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T21:00Z",
+              "cape_jkg": 410.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T22:00Z",
+              "cape_jkg": 440.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T23:00Z",
+              "cape_jkg": 300.0
+            },
+            {
+              "valid_time_utc": "2026-08-17T00:00Z",
+              "cape_jkg": 260.0
             }
           ]
         },
@@ -21584,7 +21632,7 @@
               "wind_dir_deg": 237,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 70.0
+              "cape_jkg": 40.0
             },
             {
               "valid_time_utc": "2026-08-16T13:00Z",
@@ -21599,7 +21647,7 @@
               "wind_dir_deg": 236,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 50.0
+              "cape_jkg": 20.0
             },
             {
               "valid_time_utc": "2026-08-16T14:00Z",
@@ -21614,7 +21662,7 @@
               "wind_dir_deg": 235,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 40.0
+              "cape_jkg": 20.0
             },
             {
               "valid_time_utc": "2026-08-16T15:00Z",
@@ -21629,7 +21677,7 @@
               "wind_dir_deg": 255,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 40.0
+              "cape_jkg": 30.0
             },
             {
               "valid_time_utc": "2026-08-16T16:00Z",
@@ -21644,7 +21692,7 @@
               "wind_dir_deg": 258,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 410.0
+              "cape_jkg": 400.0
             },
             {
               "valid_time_utc": "2026-08-16T17:00Z",
@@ -21659,7 +21707,7 @@
               "wind_dir_deg": 264,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 440.0
+              "cape_jkg": 560.0
             },
             {
               "valid_time_utc": "2026-08-16T18:00Z",
@@ -21674,7 +21722,31 @@
               "wind_dir_deg": 259,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 690.0
+              "cape_jkg": 800.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T19:00Z",
+              "cape_jkg": 670.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T20:00Z",
+              "cape_jkg": 410.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T21:00Z",
+              "cape_jkg": 460.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T22:00Z",
+              "cape_jkg": 330.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T23:00Z",
+              "cape_jkg": 290.0
+            },
+            {
+              "valid_time_utc": "2026-08-17T00:00Z",
+              "cape_jkg": 200.0
             }
           ]
         },
@@ -32063,7 +32135,7 @@
               "wind_dir_deg": 184,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 80.0
+              "cape_jkg": 50.0
             },
             {
               "valid_time_utc": "2026-08-16T13:00Z",
@@ -32078,7 +32150,7 @@
               "wind_dir_deg": 178,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 60.0
+              "cape_jkg": 40.0
             },
             {
               "valid_time_utc": "2026-08-16T14:00Z",
@@ -32093,7 +32165,7 @@
               "wind_dir_deg": 174,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 70.0
+              "cape_jkg": 40.0
             },
             {
               "valid_time_utc": "2026-08-16T15:00Z",
@@ -32108,7 +32180,7 @@
               "wind_dir_deg": 184,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 70.0
+              "cape_jkg": 50.0
             },
             {
               "valid_time_utc": "2026-08-16T16:00Z",
@@ -32123,7 +32195,7 @@
               "wind_dir_deg": 255,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 640.0
+              "cape_jkg": 630.0
             },
             {
               "valid_time_utc": "2026-08-16T17:00Z",
@@ -32138,7 +32210,7 @@
               "wind_dir_deg": 251,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 730.0
+              "cape_jkg": 760.0
             },
             {
               "valid_time_utc": "2026-08-16T18:00Z",
@@ -32153,7 +32225,31 @@
               "wind_dir_deg": 244,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 680.0
+              "cape_jkg": 730.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T19:00Z",
+              "cape_jkg": 660.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T20:00Z",
+              "cape_jkg": 860.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T21:00Z",
+              "cape_jkg": 560.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T22:00Z",
+              "cape_jkg": 560.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T23:00Z",
+              "cape_jkg": 460.0
+            },
+            {
+              "valid_time_utc": "2026-08-17T00:00Z",
+              "cape_jkg": 230.0
             }
           ]
         },
@@ -42543,7 +42639,7 @@
               "wind_dir_deg": 223,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 90.0
+              "cape_jkg": 40.0
             },
             {
               "valid_time_utc": "2026-08-16T13:00Z",
@@ -42558,7 +42654,7 @@
               "wind_dir_deg": 221,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 60.0
+              "cape_jkg": 40.0
             },
             {
               "valid_time_utc": "2026-08-16T14:00Z",
@@ -42573,7 +42669,7 @@
               "wind_dir_deg": 220,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 50.0
+              "cape_jkg": 30.0
             },
             {
               "valid_time_utc": "2026-08-16T15:00Z",
@@ -42588,7 +42684,7 @@
               "wind_dir_deg": 246,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 30.0
+              "cape_jkg": 20.0
             },
             {
               "valid_time_utc": "2026-08-16T16:00Z",
@@ -42618,7 +42714,7 @@
               "wind_dir_deg": 263,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 380.0
+              "cape_jkg": 460.0
             },
             {
               "valid_time_utc": "2026-08-16T18:00Z",
@@ -42633,7 +42729,31 @@
               "wind_dir_deg": 258,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 720.0
+              "cape_jkg": 790.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T19:00Z",
+              "cape_jkg": 680.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T20:00Z",
+              "cape_jkg": 380.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T21:00Z",
+              "cape_jkg": 430.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T22:00Z",
+              "cape_jkg": 330.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T23:00Z",
+              "cape_jkg": 260.0
+            },
+            {
+              "valid_time_utc": "2026-08-17T00:00Z",
+              "cape_jkg": 160.0
             }
           ]
         },
@@ -53028,7 +53148,7 @@
               "wind_dir_deg": 223,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 90.0
+              "cape_jkg": 40.0
             },
             {
               "valid_time_utc": "2026-08-16T13:00Z",
@@ -53043,7 +53163,7 @@
               "wind_dir_deg": 221,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 60.0
+              "cape_jkg": 40.0
             },
             {
               "valid_time_utc": "2026-08-16T14:00Z",
@@ -53058,7 +53178,7 @@
               "wind_dir_deg": 220,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 50.0
+              "cape_jkg": 30.0
             },
             {
               "valid_time_utc": "2026-08-16T15:00Z",
@@ -53073,7 +53193,7 @@
               "wind_dir_deg": 246,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 30.0
+              "cape_jkg": 20.0
             },
             {
               "valid_time_utc": "2026-08-16T16:00Z",
@@ -53103,7 +53223,7 @@
               "wind_dir_deg": 263,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 380.0
+              "cape_jkg": 460.0
             },
             {
               "valid_time_utc": "2026-08-16T18:00Z",
@@ -53118,7 +53238,31 @@
               "wind_dir_deg": 258,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 720.0
+              "cape_jkg": 790.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T19:00Z",
+              "cape_jkg": 680.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T20:00Z",
+              "cape_jkg": 380.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T21:00Z",
+              "cape_jkg": 430.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T22:00Z",
+              "cape_jkg": 330.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T23:00Z",
+              "cape_jkg": 260.0
+            },
+            {
+              "valid_time_utc": "2026-08-17T00:00Z",
+              "cape_jkg": 160.0
             }
           ]
         },
@@ -63507,7 +63651,7 @@
               "wind_dir_deg": 218,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 60.0
+              "cape_jkg": 90.0
             },
             {
               "valid_time_utc": "2026-08-16T13:00Z",
@@ -63522,7 +63666,7 @@
               "wind_dir_deg": 221,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 60.0
+              "cape_jkg": 100.0
             },
             {
               "valid_time_utc": "2026-08-16T14:00Z",
@@ -63537,7 +63681,7 @@
               "wind_dir_deg": 215,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 60.0
+              "cape_jkg": 90.0
             },
             {
               "valid_time_utc": "2026-08-16T15:00Z",
@@ -63552,7 +63696,7 @@
               "wind_dir_deg": 213,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 70.0
+              "cape_jkg": 90.0
             },
             {
               "valid_time_utc": "2026-08-16T16:00Z",
@@ -63567,7 +63711,7 @@
               "wind_dir_deg": 185,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 720.0
+              "cape_jkg": 850.0
             },
             {
               "valid_time_utc": "2026-08-16T17:00Z",
@@ -63582,7 +63726,7 @@
               "wind_dir_deg": 223,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 520.0
+              "cape_jkg": 670.0
             },
             {
               "valid_time_utc": "2026-08-16T18:00Z",
@@ -63597,7 +63741,31 @@
               "wind_dir_deg": 247,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 290.0
+              "cape_jkg": 470.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T19:00Z",
+              "cape_jkg": 500.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T20:00Z",
+              "cape_jkg": 390.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T21:00Z",
+              "cape_jkg": 790.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T22:00Z",
+              "cape_jkg": 520.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T23:00Z",
+              "cape_jkg": 310.0
+            },
+            {
+              "valid_time_utc": "2026-08-17T00:00Z",
+              "cape_jkg": 280.0
             }
           ]
         },
@@ -73988,7 +74156,7 @@
               "wind_dir_deg": 210,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 70.0
+              "cape_jkg": 170.0
             },
             {
               "valid_time_utc": "2026-08-16T13:00Z",
@@ -74003,7 +74171,7 @@
               "wind_dir_deg": 211,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 80.0
+              "cape_jkg": 130.0
             },
             {
               "valid_time_utc": "2026-08-16T14:00Z",
@@ -74018,7 +74186,7 @@
               "wind_dir_deg": 206,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 80.0
+              "cape_jkg": 100.0
             },
             {
               "valid_time_utc": "2026-08-16T15:00Z",
@@ -74033,7 +74201,7 @@
               "wind_dir_deg": 205,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 60.0
+              "cape_jkg": 90.0
             },
             {
               "valid_time_utc": "2026-08-16T16:00Z",
@@ -74048,7 +74216,7 @@
               "wind_dir_deg": 204,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 490.0
+              "cape_jkg": 650.0
             },
             {
               "valid_time_utc": "2026-08-16T17:00Z",
@@ -74063,7 +74231,7 @@
               "wind_dir_deg": 217,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 500.0
+              "cape_jkg": 770.0
             },
             {
               "valid_time_utc": "2026-08-16T18:00Z",
@@ -74078,7 +74246,31 @@
               "wind_dir_deg": 233,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 520.0
+              "cape_jkg": 840.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T19:00Z",
+              "cape_jkg": 660.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T20:00Z",
+              "cape_jkg": 730.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T21:00Z",
+              "cape_jkg": 820.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T22:00Z",
+              "cape_jkg": 710.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T23:00Z",
+              "cape_jkg": 570.0
+            },
+            {
+              "valid_time_utc": "2026-08-17T00:00Z",
+              "cape_jkg": 660.0
             }
           ]
         },
@@ -84474,7 +84666,7 @@
               "wind_dir_deg": 228,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 80.0
+              "cape_jkg": 180.0
             },
             {
               "valid_time_utc": "2026-08-16T13:00Z",
@@ -84489,7 +84681,7 @@
               "wind_dir_deg": 233,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 60.0
+              "cape_jkg": 150.0
             },
             {
               "valid_time_utc": "2026-08-16T14:00Z",
@@ -84504,7 +84696,7 @@
               "wind_dir_deg": 231,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 40.0
+              "cape_jkg": 90.0
             },
             {
               "valid_time_utc": "2026-08-16T15:00Z",
@@ -84519,7 +84711,7 @@
               "wind_dir_deg": 230,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 60.0
+              "cape_jkg": 100.0
             },
             {
               "valid_time_utc": "2026-08-16T16:00Z",
@@ -84534,7 +84726,7 @@
               "wind_dir_deg": 193,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 570.0
+              "cape_jkg": 890.0
             },
             {
               "valid_time_utc": "2026-08-16T17:00Z",
@@ -84549,7 +84741,7 @@
               "wind_dir_deg": 211,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 490.0
+              "cape_jkg": 890.0
             },
             {
               "valid_time_utc": "2026-08-16T18:00Z",
@@ -84564,7 +84756,31 @@
               "wind_dir_deg": 242,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
+              "cape_jkg": 950.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T19:00Z",
+              "cape_jkg": 760.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T20:00Z",
+              "cape_jkg": 660.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T21:00Z",
+              "cape_jkg": 560.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T22:00Z",
+              "cape_jkg": 630.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T23:00Z",
               "cape_jkg": 550.0
+            },
+            {
+              "valid_time_utc": "2026-08-17T00:00Z",
+              "cape_jkg": 420.0
             }
           ]
         },
@@ -94960,7 +95176,7 @@
               "wind_dir_deg": 237,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 70.0
+              "cape_jkg": 130.0
             },
             {
               "valid_time_utc": "2026-08-16T13:00Z",
@@ -94975,7 +95191,7 @@
               "wind_dir_deg": 245,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 50.0
+              "cape_jkg": 100.0
             },
             {
               "valid_time_utc": "2026-08-16T14:00Z",
@@ -94990,7 +95206,7 @@
               "wind_dir_deg": 246,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 20.0
+              "cape_jkg": 70.0
             },
             {
               "valid_time_utc": "2026-08-16T15:00Z",
@@ -95005,7 +95221,7 @@
               "wind_dir_deg": 250,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 40.0
+              "cape_jkg": 80.0
             },
             {
               "valid_time_utc": "2026-08-16T16:00Z",
@@ -95020,7 +95236,7 @@
               "wind_dir_deg": 267,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 370.0
+              "cape_jkg": 740.0
             },
             {
               "valid_time_utc": "2026-08-16T17:00Z",
@@ -95035,7 +95251,7 @@
               "wind_dir_deg": 259,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 460.0
+              "cape_jkg": 860.0
             },
             {
               "valid_time_utc": "2026-08-16T18:00Z",
@@ -95050,7 +95266,31 @@
               "wind_dir_deg": 265,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 520.0
+              "cape_jkg": 810.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T19:00Z",
+              "cape_jkg": 650.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T20:00Z",
+              "cape_jkg": 620.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T21:00Z",
+              "cape_jkg": 540.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T22:00Z",
+              "cape_jkg": 560.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T23:00Z",
+              "cape_jkg": 580.0
+            },
+            {
+              "valid_time_utc": "2026-08-17T00:00Z",
+              "cape_jkg": 410.0
             }
           ]
         },
@@ -105446,7 +105686,7 @@
               "wind_dir_deg": 220,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 120.0
+              "cape_jkg": 140.0
             },
             {
               "valid_time_utc": "2026-08-16T13:00Z",
@@ -105461,7 +105701,7 @@
               "wind_dir_deg": 224,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 70.0
+              "cape_jkg": 110.0
             },
             {
               "valid_time_utc": "2026-08-16T14:00Z",
@@ -105476,7 +105716,7 @@
               "wind_dir_deg": 225,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 20.0
+              "cape_jkg": 80.0
             },
             {
               "valid_time_utc": "2026-08-16T15:00Z",
@@ -105491,7 +105731,7 @@
               "wind_dir_deg": 218,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 10.0
+              "cape_jkg": 50.0
             },
             {
               "valid_time_utc": "2026-08-16T16:00Z",
@@ -105506,7 +105746,7 @@
               "wind_dir_deg": 231,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 160.0
+              "cape_jkg": 430.0
             },
             {
               "valid_time_utc": "2026-08-16T17:00Z",
@@ -105521,7 +105761,7 @@
               "wind_dir_deg": 238,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 380.0
+              "cape_jkg": 710.0
             },
             {
               "valid_time_utc": "2026-08-16T18:00Z",
@@ -105536,7 +105776,31 @@
               "wind_dir_deg": 252,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "cape_jkg": 500.0
+              "cape_jkg": 780.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T19:00Z",
+              "cape_jkg": 690.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T20:00Z",
+              "cape_jkg": 620.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T21:00Z",
+              "cape_jkg": 510.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T22:00Z",
+              "cape_jkg": 480.0
+            },
+            {
+              "valid_time_utc": "2026-08-16T23:00Z",
+              "cape_jkg": 370.0
+            },
+            {
+              "valid_time_utc": "2026-08-17T00:00Z",
+              "cape_jkg": 190.0
             }
           ]
         },
