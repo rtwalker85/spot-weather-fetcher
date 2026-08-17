@@ -3,7 +3,7 @@
     {
       "id": "test_canmore",
       "route": "Test Point",
-      "label": "Canmore townsite — verification point only, not a trail",
+      "label": "Canmore townsite \u2014 verification point only, not a trail",
       "lat": 51.0886,
       "lon": -115.3489,
       "elevation_m": 1309,
@@ -12,11 +12,11 @@
     {
       "id": "northover_ridge_high_point",
       "route": "Northover Ridge",
-      "label": "ridge crest high point, from GPX track",
+      "label": "ridge crest high point, from GPX track -- completed 2026-08-15, deactivated from pull",
       "lat": 50.59782,
       "lon": -115.26796,
       "elevation_m": 2788,
-      "active": true
+      "active": false
     },
     {
       "id": "ribbon_galatea_col",
