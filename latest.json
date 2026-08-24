@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-08-24T08:43:25Z",
+  "generated_at_utc": "2026-08-24T09:42:59Z",
   "source": "Open-Meteo (per-model point forecasts; CAMS for air quality)",
   "note": "This file is self-contained -- everything needed to interpret it is below or inline in each location/model entry; nothing here requires access to this repo's other files (e.g. locations.json).\n\nFORECAST SERIES, NOT A SNAPSHOT: every model provides hourly readings covering up to 5 days ahead, in each location's by_model.<model>.readings array (chronological, one entry per hour). Models differ in how far ahead they forecast at all -- HRRR and HRDPS are short-range (roughly 2 days) but highest resolution and best for next-day planning; GFS, GDPS and ECMWF reach the full 5 days at coarser resolution. A model's series simply ends when its forecast does. Check checkpoint_count / earliest_valid_utc / latest_valid_utc under \"models\" for each model's actual coverage.\n\nUSING THIS FOR TRIP PLANNING -- the models are deliberately kept separate rather than blended, because the SPREAD BETWEEN THEM IS ITSELF THE SIGNAL. When models agree closely, the forecast is confident; when they disagree (say cloud-at-elevation ranging 15-55 percent, or temperature spanning 3+ degrees), that is genuine forecast uncertainty and should be surfaced as such rather than averaged into a single number that hides it. For a go/no-go call, prefer reporting the range, or the worst case, over the mean.\n\nWHICH MODELS TO WEIGHT, BY HOW FAR OUT: for today and tomorrow, prefer HRDPS (2.5km) and HRRR (3km) -- they have much finer terrain resolution, which matters enormously in steep alpine country, and they are what a human would check for next-day planning. They only reach ~2 days out. For days 3-5, only GDPS, GFS and the ECMWF models still have data; treat those as a coarser trend (is a system moving in, is the freezing level rising or falling) rather than as hour-specific detail, and expect them to be revised as the date approaches.\n\nROUTES CAN HAVE SEVERAL TRACKED POINTS: locations each carry a \"route\" field, and more than one location can share it -- route \"Rockwall\" has four passes and \"Buller Pass Loop\" has two, because conditions differ meaningfully along a long traverse. For a route-level verdict, gate on the WORST point on that route, not an average of them: being clear at one pass is no comfort if another is socked in or above the freezing level.\n\nDO NOT GATE ON CLOUD ALONE. Cloud at elevation answers \"can I see / am I in the soup\", but it is one hazard among several and a route can be clear and still be a bad idea. Weigh at minimum: PRECIPITATION -- both how likely and HOW MUCH (precip_probability_pct is the chance, precip_mm is the actual amount falling in that hour, and snowfall_cm the snow depth in that hour; sum precip_mm across the hours you will be out to get a total, since 8 hours of light rain matters more than one heavy hour you can wait out) -- plus THUNDERSTORM risk (see below), wind (wind_gust_kmh; exposed ridges and passes are the worst place to be caught in gusts), freezing_level_m relative to the location elevation (at or below it means snow and ice underfoot rather than rain), visibility_km, and wildfire smoke via the air_quality block. A sensible verdict weighs all of these, not just whether the crux is in cloud.\n\nTHUNDERSTORMS -- especially important on exposed alpine ridges, where there is no shelter, lightning is a genuine life-safety risk, and storms typically build through the afternoon. Signals, strongest first: weather_code of 95, 96 or 99 is an explicit thunderstorm forecast; lifted_index below 0 means unstable (more negative is more unstable; below -4 strongly so); cape_jkg rising through the day indicates building instability (roughly: under 300 little risk, 300-1000 moderate, over 1000 significant); cin_jkg is the cap holding storms back, so LOW cin_jkg alongside HIGH cape_jkg is the dangerous combination. lifted_index and cin_jkg are GFS-family only. Prefer an early start and a pre-planned bail when afternoon instability is forecast.\n\nweather_code follows the WMO convention: 0 clear, 1-3 increasingly cloudy, 45/48 fog, 51-57 drizzle (56/57 freezing), 61-67 rain (66/67 freezing), 71-77 snow, 80-82 rain showers, 85/86 snow showers, 95 thunderstorm, 96/99 thunderstorm with hail.\n\nCLOUD AT TRAIL ELEVATION -- read this before judging whether a route is socked in. cloud_cover_at_elevation_pct is the important one: cloud cover interpolated to the location's REAL elevation, so it answers 'is this specific ridge/pass in cloud right now'. Prefer it over the others for go/no-go calls. The plain cloud_cover_pct (whole-column) and cloud_cover_low/mid/high_pct fields are ambiguous in mountains: cloud_cover_low_pct = 100 at a 2700m ridge can mean socked in, OR can mean the point is in sunshine above a valley inversion. Comparing cloud_cover_at_elevation_pct against cloud_cover_low_pct distinguishes those two cases. Not every model publishes pressure-level cloud (ECMWF IFS/AIFS do not), so that field is absent for those models.\n\nUNITS (encoded in each field's name suffix): _c = Celsius. _kmh = km/h. wind_dir_deg = degrees true, the direction wind blows FROM. _pct = percent. _km = kilometres. _m = metres. _mm = millimetres (precipitation in that hour). _cm = centimetres (snowfall in that hour). _ugm3 = micrograms per cubic metre. cape_jkg = J/kg (instability / thunderstorm potential; 0 is stable, higher is more unstable). us_aqi is the US Air Quality Index scale. aerosol_optical_depth is unitless and is a useful wildfire-smoke haze indicator.\n\nDifferent models publish different variables -- a model's readings only include what that model actually provides. visibility_km and freezing_level_m are GFS-family only. Air-quality fields (pm2_5, pm10, us_aqi, aerosol_optical_depth) come from a separate global forecast (CAMS) and are therefore listed ONCE per location under air_quality, not repeated per weather model. Check the top-level air_quality_status field: if it is not \"ok\", that upstream service failed this run and the air_quality blocks are absent -- that is a temporary fetch failure, NOT a reading of clean air.\n\nforecast_elevation_m and grid_distance_km sit at the LOCATION level (not per model) because every model for a location is resolved to the same downscaled grid point: forecast_elevation_m is the elevation the forecast was resolved at, and grid_distance_km is how far that point sits from the requested coordinates. Compare forecast_elevation_m against this location's own elevation_m to judge how well the terrain was captured -- a large gap means temperature and freezing-level values are biased toward the resolved elevation rather than the real one. In practice these agree closely (tens of metres) even on sharp ridges.\n\nValues are downscaled and elevation-corrected rather than being raw model grid output. In steep terrain this is materially more accurate for a specific point than the underlying coarse grid would be.\n\nThis file only includes locations currently tracked as active in the pipeline's config -- if a route or point you expect isn't listed under \"locations\" below, it isn't tracked yet; that is not a fetch failure.",
   "air_quality_status": "ok",
@@ -4405,7 +4405,7 @@
               "wind_dir_deg": 13,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 2.5,
@@ -4615,7 +4615,7 @@
               "wind_dir_deg": 353,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 1,
               "cape_jkg": 90.0,
               "lifted_index": 0.4,
@@ -4657,7 +4657,7 @@
               "wind_dir_deg": 360,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 90.0,
               "lifted_index": 0.2,
@@ -4678,7 +4678,7 @@
               "wind_dir_deg": 17,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 1,
               "cape_jkg": 100.0,
               "lifted_index": 0.1,
@@ -4762,7 +4762,7 @@
               "wind_dir_deg": 130,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 7,
+              "precip_probability_pct": 9,
               "weather_code": 2,
               "cape_jkg": 70.0,
               "lifted_index": -0.4,
@@ -4783,7 +4783,7 @@
               "wind_dir_deg": 193,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 5,
               "weather_code": 0,
               "cape_jkg": 30.0,
               "lifted_index": -0.1,
@@ -5119,7 +5119,7 @@
               "wind_dir_deg": 128,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 110.0,
               "lifted_index": -1.0,
@@ -5161,7 +5161,7 @@
               "wind_dir_deg": 135,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 3,
               "weather_code": 0,
               "cape_jkg": 270.0,
               "lifted_index": -1.9,
@@ -5182,7 +5182,7 @@
               "wind_dir_deg": 136,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 3,
               "weather_code": 3,
               "cape_jkg": 330.0,
               "lifted_index": -2.1,
@@ -5203,7 +5203,7 @@
               "wind_dir_deg": 136,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 3,
               "weather_code": 0,
               "cape_jkg": 330.0,
               "lifted_index": -2.2,
@@ -5224,7 +5224,7 @@
               "wind_dir_deg": 133,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 3,
               "weather_code": 0,
               "cape_jkg": 370.0,
               "lifted_index": -2.5,
@@ -5408,27 +5408,27 @@
             },
             {
               "valid_time_utc": "2026-08-26T19:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T20:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T21:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T22:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T23:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T00:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T01:00Z",
@@ -5456,27 +5456,27 @@
             },
             {
               "valid_time_utc": "2026-08-27T07:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T08:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T09:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T10:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T11:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T12:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T13:00Z",
@@ -5504,119 +5504,119 @@
             },
             {
               "valid_time_utc": "2026-08-27T19:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T20:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T21:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T22:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T23:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-28T00:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-28T01:00Z",
-              "precip_probability_pct": 10
+              "precip_probability_pct": 16
             },
             {
               "valid_time_utc": "2026-08-28T02:00Z",
-              "precip_probability_pct": 10
+              "precip_probability_pct": 16
             },
             {
               "valid_time_utc": "2026-08-28T03:00Z",
-              "precip_probability_pct": 10
+              "precip_probability_pct": 16
             },
             {
               "valid_time_utc": "2026-08-28T04:00Z",
-              "precip_probability_pct": 10
+              "precip_probability_pct": 16
             },
             {
               "valid_time_utc": "2026-08-28T05:00Z",
-              "precip_probability_pct": 10
+              "precip_probability_pct": 16
             },
             {
               "valid_time_utc": "2026-08-28T06:00Z",
-              "precip_probability_pct": 10
+              "precip_probability_pct": 16
             },
             {
               "valid_time_utc": "2026-08-28T07:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T08:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T09:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T10:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T11:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T12:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T13:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T14:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T15:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T16:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T17:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T18:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T19:00Z",
-              "precip_probability_pct": 3
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T20:00Z",
-              "precip_probability_pct": 3
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T21:00Z",
-              "precip_probability_pct": 3
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T22:00Z",
-              "precip_probability_pct": 3
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T23:00Z",
-              "precip_probability_pct": 3
+              "precip_probability_pct": 0
             }
           ]
         },
@@ -17030,7 +17030,7 @@
               "wind_dir_deg": 278,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 240.0,
               "lifted_index": -1.5,
@@ -17051,7 +17051,7 @@
               "wind_dir_deg": 310,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 3,
               "weather_code": 2,
               "cape_jkg": 250.0,
               "lifted_index": -1.9,
@@ -17114,7 +17114,7 @@
               "wind_dir_deg": 131,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 5,
+              "precip_probability_pct": 7,
               "weather_code": 1,
               "cape_jkg": 100.0,
               "lifted_index": -0.7,
@@ -17471,7 +17471,7 @@
               "wind_dir_deg": 143,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 70.0,
               "lifted_index": -0.8,
@@ -17492,7 +17492,7 @@
               "wind_dir_deg": 138,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 90.0,
               "lifted_index": -0.9,
@@ -17513,7 +17513,7 @@
               "wind_dir_deg": 130,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 2,
               "weather_code": 2,
               "cape_jkg": 250.0,
               "lifted_index": -1.8,
@@ -17534,7 +17534,7 @@
               "wind_dir_deg": 152,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 2,
               "weather_code": 2,
               "cape_jkg": 640.0,
               "lifted_index": -3.2,
@@ -17555,7 +17555,7 @@
               "wind_dir_deg": 216,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 510.0,
               "lifted_index": -2.8,
@@ -17576,7 +17576,7 @@
               "wind_dir_deg": 234,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 430.0,
               "lifted_index": -2.5,
@@ -17808,27 +17808,27 @@
             },
             {
               "valid_time_utc": "2026-08-27T07:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T08:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T09:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T10:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T11:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T12:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T13:00Z",
@@ -17856,119 +17856,119 @@
             },
             {
               "valid_time_utc": "2026-08-27T19:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T20:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T21:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T22:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T23:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-28T00:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-28T01:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T02:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T03:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T04:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T05:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T06:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T07:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T08:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T09:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T10:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T11:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T12:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T13:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T14:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T15:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T16:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T17:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T18:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T19:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T20:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T21:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T22:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T23:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             }
           ]
         },
@@ -29327,7 +29327,7 @@
               "wind_dir_deg": 304,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 160.0,
               "lifted_index": -0.7,
@@ -29369,7 +29369,7 @@
               "wind_dir_deg": 307,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 230.0,
               "lifted_index": -1.5,
@@ -29453,7 +29453,7 @@
               "wind_dir_deg": 103,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 5,
+              "precip_probability_pct": 6,
               "weather_code": 0,
               "cape_jkg": 190.0,
               "lifted_index": -1.3,
@@ -29831,7 +29831,7 @@
               "wind_dir_deg": 180,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 440.0,
               "lifted_index": -2.4,
@@ -29852,7 +29852,7 @@
               "wind_dir_deg": 155,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 3,
               "cape_jkg": 620.0,
               "lifted_index": -3.1,
@@ -29873,7 +29873,7 @@
               "wind_dir_deg": 132,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 0,
               "cape_jkg": 790.0,
               "lifted_index": -3.7,
@@ -29894,7 +29894,7 @@
               "wind_dir_deg": 122,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 0,
               "cape_jkg": 880.0,
               "lifted_index": -4.1,
@@ -29915,7 +29915,7 @@
               "wind_dir_deg": 121,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 0,
               "cape_jkg": 850.0,
               "lifted_index": -4.2,
@@ -30147,27 +30147,27 @@
             },
             {
               "valid_time_utc": "2026-08-27T07:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T08:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T09:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T10:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T11:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T12:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T13:00Z",
@@ -30195,51 +30195,51 @@
             },
             {
               "valid_time_utc": "2026-08-27T19:00Z",
-              "precip_probability_pct": 11
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-27T20:00Z",
-              "precip_probability_pct": 11
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-27T21:00Z",
-              "precip_probability_pct": 11
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-27T22:00Z",
-              "precip_probability_pct": 11
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-27T23:00Z",
-              "precip_probability_pct": 11
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T00:00Z",
-              "precip_probability_pct": 11
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T01:00Z",
-              "precip_probability_pct": 12
+              "precip_probability_pct": 18
             },
             {
               "valid_time_utc": "2026-08-28T02:00Z",
-              "precip_probability_pct": 12
+              "precip_probability_pct": 18
             },
             {
               "valid_time_utc": "2026-08-28T03:00Z",
-              "precip_probability_pct": 12
+              "precip_probability_pct": 18
             },
             {
               "valid_time_utc": "2026-08-28T04:00Z",
-              "precip_probability_pct": 12
+              "precip_probability_pct": 18
             },
             {
               "valid_time_utc": "2026-08-28T05:00Z",
-              "precip_probability_pct": 12
+              "precip_probability_pct": 18
             },
             {
               "valid_time_utc": "2026-08-28T06:00Z",
-              "precip_probability_pct": 12
+              "precip_probability_pct": 18
             },
             {
               "valid_time_utc": "2026-08-28T07:00Z",
@@ -30267,47 +30267,47 @@
             },
             {
               "valid_time_utc": "2026-08-28T13:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T14:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T15:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T16:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T17:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T18:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T19:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T20:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T21:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T22:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T23:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             }
           ]
         },
@@ -41721,7 +41721,7 @@
               "wind_dir_deg": 278,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 240.0,
               "lifted_index": -1.5,
@@ -41742,7 +41742,7 @@
               "wind_dir_deg": 310,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 3,
               "weather_code": 2,
               "cape_jkg": 250.0,
               "lifted_index": -1.9,
@@ -41805,7 +41805,7 @@
               "wind_dir_deg": 131,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 5,
+              "precip_probability_pct": 7,
               "weather_code": 1,
               "cape_jkg": 100.0,
               "lifted_index": -0.7,
@@ -42162,7 +42162,7 @@
               "wind_dir_deg": 143,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 70.0,
               "lifted_index": -0.8,
@@ -42183,7 +42183,7 @@
               "wind_dir_deg": 138,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 90.0,
               "lifted_index": -0.9,
@@ -42204,7 +42204,7 @@
               "wind_dir_deg": 130,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 3,
               "weather_code": 2,
               "cape_jkg": 250.0,
               "lifted_index": -1.8,
@@ -42225,7 +42225,7 @@
               "wind_dir_deg": 152,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 3,
               "weather_code": 2,
               "cape_jkg": 640.0,
               "lifted_index": -3.2,
@@ -42246,7 +42246,7 @@
               "wind_dir_deg": 216,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 3,
               "weather_code": 0,
               "cape_jkg": 510.0,
               "lifted_index": -2.8,
@@ -42267,7 +42267,7 @@
               "wind_dir_deg": 234,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 3,
               "weather_code": 0,
               "cape_jkg": 430.0,
               "lifted_index": -2.5,
@@ -42451,27 +42451,27 @@
             },
             {
               "valid_time_utc": "2026-08-26T19:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T20:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T21:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T22:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T23:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T00:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T01:00Z",
@@ -42499,27 +42499,27 @@
             },
             {
               "valid_time_utc": "2026-08-27T07:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T08:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T09:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T10:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T11:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T12:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T13:00Z",
@@ -42547,51 +42547,51 @@
             },
             {
               "valid_time_utc": "2026-08-27T19:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T20:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T21:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T22:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T23:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-28T00:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-28T01:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T02:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T03:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T04:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T05:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T06:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T07:00Z",
@@ -42619,47 +42619,47 @@
             },
             {
               "valid_time_utc": "2026-08-28T13:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T14:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T15:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T16:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T17:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T18:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T19:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T20:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T21:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T22:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T23:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             }
           ]
         },
@@ -54073,7 +54073,7 @@
               "wind_dir_deg": 278,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 240.0,
               "lifted_index": -1.5,
@@ -54094,7 +54094,7 @@
               "wind_dir_deg": 310,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 3,
               "weather_code": 2,
               "cape_jkg": 250.0,
               "lifted_index": -1.9,
@@ -54157,7 +54157,7 @@
               "wind_dir_deg": 131,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 5,
+              "precip_probability_pct": 7,
               "weather_code": 1,
               "cape_jkg": 100.0,
               "lifted_index": -0.7,
@@ -54514,7 +54514,7 @@
               "wind_dir_deg": 143,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 70.0,
               "lifted_index": -0.8,
@@ -54535,7 +54535,7 @@
               "wind_dir_deg": 138,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 90.0,
               "lifted_index": -0.9,
@@ -54556,7 +54556,7 @@
               "wind_dir_deg": 130,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 3,
               "weather_code": 2,
               "cape_jkg": 250.0,
               "lifted_index": -1.8,
@@ -54577,7 +54577,7 @@
               "wind_dir_deg": 152,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 3,
               "weather_code": 2,
               "cape_jkg": 640.0,
               "lifted_index": -3.2,
@@ -54598,7 +54598,7 @@
               "wind_dir_deg": 216,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 3,
               "weather_code": 0,
               "cape_jkg": 510.0,
               "lifted_index": -2.8,
@@ -54619,7 +54619,7 @@
               "wind_dir_deg": 234,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 4,
+              "precip_probability_pct": 3,
               "weather_code": 0,
               "cape_jkg": 430.0,
               "lifted_index": -2.5,
@@ -54803,27 +54803,27 @@
             },
             {
               "valid_time_utc": "2026-08-26T19:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T20:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T21:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T22:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-26T23:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T00:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T01:00Z",
@@ -54851,27 +54851,27 @@
             },
             {
               "valid_time_utc": "2026-08-27T07:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T08:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T09:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T10:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T11:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T12:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T13:00Z",
@@ -54899,51 +54899,51 @@
             },
             {
               "valid_time_utc": "2026-08-27T19:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T20:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T21:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T22:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-27T23:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-28T00:00Z",
-              "precip_probability_pct": 8
+              "precip_probability_pct": 11
             },
             {
               "valid_time_utc": "2026-08-28T01:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T02:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T03:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T04:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T05:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T06:00Z",
-              "precip_probability_pct": 9
+              "precip_probability_pct": 14
             },
             {
               "valid_time_utc": "2026-08-28T07:00Z",
@@ -54971,47 +54971,47 @@
             },
             {
               "valid_time_utc": "2026-08-28T13:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T14:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T15:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T16:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T17:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T18:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T19:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T20:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T21:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T22:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-28T23:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             }
           ]
         },
@@ -66128,7 +66128,7 @@
               "wind_dir_deg": 297,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 2.7,
@@ -66149,7 +66149,7 @@
               "wind_dir_deg": 290,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 2.3,
@@ -66170,7 +66170,7 @@
               "wind_dir_deg": 294,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 3,
               "cape_jkg": 0.0,
               "lifted_index": 1.9,
@@ -66422,7 +66422,7 @@
               "wind_dir_deg": 293,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 1,
               "cape_jkg": 60.0,
               "lifted_index": -0.1,
@@ -66443,7 +66443,7 @@
               "wind_dir_deg": 288,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 1,
               "cape_jkg": 50.0,
               "lifted_index": 0.3,
@@ -66485,7 +66485,7 @@
               "wind_dir_deg": 331,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 3,
               "weather_code": 0,
               "cape_jkg": 10.0,
               "lifted_index": 0.8,
@@ -66527,7 +66527,7 @@
               "wind_dir_deg": 28,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 0.4,
@@ -66800,7 +66800,7 @@
               "wind_dir_deg": 151,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 1,
               "cape_jkg": 0.0,
               "lifted_index": 0.3,
@@ -66842,7 +66842,7 @@
               "wind_dir_deg": 162,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 1,
               "cape_jkg": 0.0,
               "lifted_index": 0.1,
@@ -66863,7 +66863,7 @@
               "wind_dir_deg": 168,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 0,
+              "precip_probability_pct": 1,
               "weather_code": 1,
               "cape_jkg": 0.0,
               "lifted_index": 0.1,
@@ -66884,7 +66884,7 @@
               "wind_dir_deg": 176,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 0,
+              "precip_probability_pct": 1,
               "weather_code": 1,
               "cape_jkg": 0.0,
               "lifted_index": 0.0,
@@ -67176,51 +67176,51 @@
             },
             {
               "valid_time_utc": "2026-08-27T01:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T02:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T03:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T04:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T05:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T06:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T07:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T08:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T09:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T10:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T11:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T12:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T13:00Z",
@@ -67272,75 +67272,75 @@
             },
             {
               "valid_time_utc": "2026-08-28T01:00Z",
-              "precip_probability_pct": 23
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T02:00Z",
-              "precip_probability_pct": 23
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T03:00Z",
-              "precip_probability_pct": 23
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T04:00Z",
-              "precip_probability_pct": 23
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T05:00Z",
-              "precip_probability_pct": 23
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T06:00Z",
-              "precip_probability_pct": 23
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T07:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 5
             },
             {
               "valid_time_utc": "2026-08-28T08:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 5
             },
             {
               "valid_time_utc": "2026-08-28T09:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 5
             },
             {
               "valid_time_utc": "2026-08-28T10:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 5
             },
             {
               "valid_time_utc": "2026-08-28T11:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 5
             },
             {
               "valid_time_utc": "2026-08-28T12:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 5
             },
             {
               "valid_time_utc": "2026-08-28T13:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T14:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T15:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T16:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T17:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T18:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T19:00Z",
@@ -78478,7 +78478,7 @@
               "wind_dir_deg": 290,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 2.2,
@@ -78520,7 +78520,7 @@
               "wind_dir_deg": 296,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 2,
               "cape_jkg": 10.0,
               "lifted_index": 1.0,
@@ -78772,7 +78772,7 @@
               "wind_dir_deg": 324,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 1,
               "cape_jkg": 60.0,
               "lifted_index": 0.1,
@@ -78793,7 +78793,7 @@
               "wind_dir_deg": 322,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 50.0,
               "lifted_index": 0.2,
@@ -79150,7 +79150,7 @@
               "wind_dir_deg": 117,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 1,
               "cape_jkg": 0.0,
               "lifted_index": 0.6,
@@ -79171,7 +79171,7 @@
               "wind_dir_deg": 157,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 0.2,
@@ -79192,7 +79192,7 @@
               "wind_dir_deg": 168,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 1,
               "cape_jkg": 0.0,
               "lifted_index": 0.3,
@@ -79213,7 +79213,7 @@
               "wind_dir_deg": 178,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 0,
+              "precip_probability_pct": 1,
               "weather_code": 1,
               "cape_jkg": 0.0,
               "lifted_index": 0.1,
@@ -79234,7 +79234,7 @@
               "wind_dir_deg": 194,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 0,
+              "precip_probability_pct": 1,
               "weather_code": 1,
               "cape_jkg": 0.0,
               "lifted_index": 0.1,
@@ -79526,27 +79526,27 @@
             },
             {
               "valid_time_utc": "2026-08-27T01:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T02:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T03:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T04:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T05:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T06:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T07:00Z",
@@ -79598,119 +79598,119 @@
             },
             {
               "valid_time_utc": "2026-08-27T19:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 26
             },
             {
               "valid_time_utc": "2026-08-27T20:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 26
             },
             {
               "valid_time_utc": "2026-08-27T21:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 26
             },
             {
               "valid_time_utc": "2026-08-27T22:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 26
             },
             {
               "valid_time_utc": "2026-08-27T23:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 26
             },
             {
               "valid_time_utc": "2026-08-28T00:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 26
             },
             {
               "valid_time_utc": "2026-08-28T01:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T02:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T03:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T04:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T05:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T06:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T07:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T08:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T09:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T10:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T11:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T12:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T13:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T14:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T15:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T16:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T17:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T18:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T19:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T20:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T21:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T22:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T23:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             }
           ]
         },
@@ -90828,7 +90828,7 @@
               "wind_dir_deg": 297,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 2.4,
@@ -90870,7 +90870,7 @@
               "wind_dir_deg": 293,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 1,
               "cape_jkg": 0.0,
               "lifted_index": 1.9,
@@ -91122,7 +91122,7 @@
               "wind_dir_deg": 314,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 120.0,
               "lifted_index": -0.8,
@@ -91143,7 +91143,7 @@
               "wind_dir_deg": 316,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 110.0,
               "lifted_index": -0.7,
@@ -91500,7 +91500,7 @@
               "wind_dir_deg": 130,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 1.2,
@@ -91521,7 +91521,7 @@
               "wind_dir_deg": 152,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 0.2,
@@ -91542,7 +91542,7 @@
               "wind_dir_deg": 165,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 1,
               "cape_jkg": 0.0,
               "lifted_index": 0.0,
@@ -91563,7 +91563,7 @@
               "wind_dir_deg": 170,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 0,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 20.0,
               "lifted_index": -0.4,
@@ -91584,7 +91584,7 @@
               "wind_dir_deg": 182,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 0,
+              "precip_probability_pct": 1,
               "weather_code": 1,
               "cape_jkg": 30.0,
               "lifted_index": -0.5,
@@ -91876,27 +91876,27 @@
             },
             {
               "valid_time_utc": "2026-08-27T01:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T02:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T03:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T04:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T05:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T06:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 4
             },
             {
               "valid_time_utc": "2026-08-27T07:00Z",
@@ -91948,119 +91948,119 @@
             },
             {
               "valid_time_utc": "2026-08-27T19:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 27
             },
             {
               "valid_time_utc": "2026-08-27T20:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 27
             },
             {
               "valid_time_utc": "2026-08-27T21:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 27
             },
             {
               "valid_time_utc": "2026-08-27T22:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 27
             },
             {
               "valid_time_utc": "2026-08-27T23:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 27
             },
             {
               "valid_time_utc": "2026-08-28T00:00Z",
-              "precip_probability_pct": 24
+              "precip_probability_pct": 27
             },
             {
               "valid_time_utc": "2026-08-28T01:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T02:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T03:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T04:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T05:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T06:00Z",
-              "precip_probability_pct": 21
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T07:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T08:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T09:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T10:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T11:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T12:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T13:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T14:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T15:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T16:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T17:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T18:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T19:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T20:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T21:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T22:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T23:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             }
           ]
         },
@@ -103220,7 +103220,7 @@
               "wind_dir_deg": 304,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 1,
               "cape_jkg": 0.0,
               "lifted_index": 2.5,
@@ -103472,7 +103472,7 @@
               "wind_dir_deg": 314,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 160.0,
               "lifted_index": -1.2,
@@ -103493,7 +103493,7 @@
               "wind_dir_deg": 319,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 120.0,
               "lifted_index": -0.9,
@@ -103514,7 +103514,7 @@
               "wind_dir_deg": 325,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 90.0,
               "lifted_index": -0.5,
@@ -103556,7 +103556,7 @@
               "wind_dir_deg": 344,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 100.0,
               "lifted_index": -0.8,
@@ -103829,7 +103829,7 @@
               "wind_dir_deg": 74,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 1.0,
@@ -103850,7 +103850,7 @@
               "wind_dir_deg": 126,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 2,
               "cape_jkg": 0.0,
               "lifted_index": 0.3,
@@ -103871,7 +103871,7 @@
               "wind_dir_deg": 169,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 2,
               "cape_jkg": 20.0,
               "lifted_index": -0.3,
@@ -103892,7 +103892,7 @@
               "wind_dir_deg": 187,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 1,
               "cape_jkg": 10.0,
               "lifted_index": -0.2,
@@ -103913,7 +103913,7 @@
               "wind_dir_deg": 198,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 0,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 10.0,
               "lifted_index": -0.3,
@@ -103934,7 +103934,7 @@
               "wind_dir_deg": 206,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 0,
+              "precip_probability_pct": 1,
               "weather_code": 2,
               "cape_jkg": 0.0,
               "lifted_index": -0.2,
@@ -104226,27 +104226,27 @@
             },
             {
               "valid_time_utc": "2026-08-27T01:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T02:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T03:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T04:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T05:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T06:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T07:00Z",
@@ -104298,119 +104298,119 @@
             },
             {
               "valid_time_utc": "2026-08-27T19:00Z",
-              "precip_probability_pct": 25
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-27T20:00Z",
-              "precip_probability_pct": 25
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-27T21:00Z",
-              "precip_probability_pct": 25
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-27T22:00Z",
-              "precip_probability_pct": 25
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-27T23:00Z",
-              "precip_probability_pct": 25
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T00:00Z",
-              "precip_probability_pct": 25
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T01:00Z",
-              "precip_probability_pct": 20
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T02:00Z",
-              "precip_probability_pct": 20
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T03:00Z",
-              "precip_probability_pct": 20
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T04:00Z",
-              "precip_probability_pct": 20
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T05:00Z",
-              "precip_probability_pct": 20
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T06:00Z",
-              "precip_probability_pct": 20
+              "precip_probability_pct": 29
             },
             {
               "valid_time_utc": "2026-08-28T07:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T08:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T09:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T10:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T11:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T12:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T13:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T14:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T15:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T16:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T17:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T18:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T19:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T20:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T21:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T22:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T23:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             }
           ]
         },
@@ -115547,7 +115547,7 @@
               "wind_dir_deg": 280,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 2.8,
@@ -115799,7 +115799,7 @@
               "wind_dir_deg": 303,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 2,
+              "precip_probability_pct": 1,
               "weather_code": 0,
               "cape_jkg": 230.0,
               "lifted_index": -1.5,
@@ -115841,7 +115841,7 @@
               "wind_dir_deg": 297,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 3,
+              "precip_probability_pct": 2,
               "weather_code": 0,
               "cape_jkg": 260.0,
               "lifted_index": -1.7,
@@ -116177,7 +116177,7 @@
               "wind_dir_deg": 180,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": 1.9,
@@ -116198,7 +116198,7 @@
               "wind_dir_deg": 170,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 1,
+              "precip_probability_pct": 0,
               "weather_code": 0,
               "cape_jkg": 0.0,
               "lifted_index": -0.1,
@@ -116261,7 +116261,7 @@
               "wind_dir_deg": 184,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 0,
+              "precip_probability_pct": 1,
               "weather_code": 3,
               "cape_jkg": 350.0,
               "lifted_index": -2.0,
@@ -116282,7 +116282,7 @@
               "wind_dir_deg": 189,
               "precip_mm": 0.0,
               "snowfall_cm": 0.0,
-              "precip_probability_pct": 0,
+              "precip_probability_pct": 1,
               "weather_code": 3,
               "cape_jkg": 410.0,
               "lifted_index": -2.3,
@@ -116574,75 +116574,75 @@
             },
             {
               "valid_time_utc": "2026-08-27T01:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T02:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T03:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T04:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T05:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T06:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 3
             },
             {
               "valid_time_utc": "2026-08-27T07:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T08:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T09:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T10:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T11:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T12:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 0
             },
             {
               "valid_time_utc": "2026-08-27T13:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T14:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T15:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T16:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T17:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T18:00Z",
-              "precip_probability_pct": 0
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-27T19:00Z",
@@ -116670,95 +116670,95 @@
             },
             {
               "valid_time_utc": "2026-08-28T01:00Z",
-              "precip_probability_pct": 22
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T02:00Z",
-              "precip_probability_pct": 22
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T03:00Z",
-              "precip_probability_pct": 22
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T04:00Z",
-              "precip_probability_pct": 22
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T05:00Z",
-              "precip_probability_pct": 22
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T06:00Z",
-              "precip_probability_pct": 22
+              "precip_probability_pct": 30
             },
             {
               "valid_time_utc": "2026-08-28T07:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T08:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T09:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T10:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T11:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T12:00Z",
-              "precip_probability_pct": 4
+              "precip_probability_pct": 6
             },
             {
               "valid_time_utc": "2026-08-28T13:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T14:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T15:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T16:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T17:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T18:00Z",
-              "precip_probability_pct": 1
+              "precip_probability_pct": 2
             },
             {
               "valid_time_utc": "2026-08-28T19:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T20:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T21:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T22:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             },
             {
               "valid_time_utc": "2026-08-28T23:00Z",
-              "precip_probability_pct": 2
+              "precip_probability_pct": 1
             }
           ]
         },
